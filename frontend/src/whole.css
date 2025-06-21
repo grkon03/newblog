@@ -1,0 +1,9 @@
+@font-face {
+  font-family: 'font-ltg';
+  src: url(./font/ロゴたいぷゴシック.otf);
+}
+
+body {
+  font-family: 'font-ltg';
+  height: 100%;
+}

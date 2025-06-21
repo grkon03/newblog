@@ -1,0 +1,9 @@
+.header {
+  background: rgba(180, 220, 255, 0.9);
+  padding: 10px 20px;
+}
+
+.header h1 {
+  cursor: pointer;
+  display: inline-block;
+}
