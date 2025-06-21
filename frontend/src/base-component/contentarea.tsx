@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './contentarea.module.css';
 import SideArea from './sidearea';
-import NotFound404 from '../template/NotFound404';
 
 type Props = {
   mainarea: React.JSX.Element;
