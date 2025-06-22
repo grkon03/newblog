@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    restart: always
+    ports:
+      - '3111:3111'
+    container_name: backend
+    volumes:
+      - ./backend:/go/src/app
+    depends_on:
+      - sql
+
+  sql:
+    build: ./sql
+    expose:
+      - '3306'
+    ports:
+      - '3306:3306'
+    restart: always
+    tty: true
+    environment:
+      MARIADB_ROOT_PASSWORD: password
+      MARIADB_DATABASE: nwbdb
+      MARIADB_USERNAME: nwb
+      MARIADB_PASSWORD: nwb
+      # TZ: "Asia/Tokyo"
+    volumes:
+      - ./sql/init:/docker-entrypoint-initdb.d
+      - ./sql/data:/var/lib/mysql
+    container_name: sql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8080:8080'
+    depends_on:
+      - sql

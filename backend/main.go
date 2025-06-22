@@ -15,4 +15,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	e.Logger.Fatal(e.Start(":3111"))
 }
