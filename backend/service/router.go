@@ -2,12 +2,13 @@ package service
 
 import "github.com/labstack/echo"
 
-func Routing(e *echo.Echo) error {
-	api := e.Group("/api")
+func Routing(e *echo.Echo, api API) error {
+	a := e.Group("/api")
 	{
-		v1 := api.Group("/v1")
+		ping := a.Group("/ping")
 		{
-			v1.GET("/ping", Ping)
+			ping.GET("/", api.Ping)
+			ping.GET("/db", api.DBPing)
 		}
 	}
 
