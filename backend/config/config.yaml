@@ -1,0 +1,10 @@
+# data stored in /nwb/config.yaml
+
+exec_config:
+  do_miguration: true
+sql_config:
+  user: 'root'
+  pass: 'password'
+  host: 'sql'
+  name: 'nwbdb'
+  port: 3306
