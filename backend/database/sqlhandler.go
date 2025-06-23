@@ -8,18 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type SQLHandler struct {
-	DB *gorm.DB
-	*DBPingHandler
-}
-
-func NewSQLHandler(db *gorm.DB) *SQLHandler {
-	return &SQLHandler{
-		db,
-		&DBPingHandler{db},
-	}
-}
-
 func dsn(sc config.SQLConfig) string {
 	return fmt.Sprintf(
 		"%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
@@ -27,7 +15,6 @@ func dsn(sc config.SQLConfig) string {
 	)
 }
 
-func ConnectSQL(sc config.SQLConfig) (*SQLHandler, error) {
-	db, err := gorm.Open(mysql.Open(dsn(sc)), &gorm.Config{})
-	return NewSQLHandler(db), err
+func ConnectSQL(sc config.SQLConfig) (*gorm.DB, error) {
+	return gorm.Open(mysql.Open(dsn(sc)), &gorm.Config{})
 }

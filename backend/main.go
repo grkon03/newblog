@@ -15,14 +15,14 @@ func main() {
 		log.Fatal(err)
 	}
 
-	sqlh, err := database.ConnectSQL(apiconfig.SQLConfig)
+	db, err := database.ConnectSQL(apiconfig.SQLConfig)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	sqlh.Migration()
+	database.Migration(db)
 
-	api := service.NewAPI(sqlh)
+	api := service.NewAPI(db)
 
 	e := echo.New()
 	err = service.Routing(e, api)

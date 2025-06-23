@@ -1,6 +1,7 @@
 package database
 
 import (
+	model "github.com/grkon03/newblog/backend/model"
 	"gorm.io/gorm"
 )
 
@@ -12,19 +13,14 @@ func NewDBPingHandler(db *gorm.DB) *DBPingHandler {
 	return &DBPingHandler{db}
 }
 
-type DBPing struct {
-	gorm.Model
-	Pong string
-}
-
 func (h *DBPingHandler) CreateDBPing() error {
-	ping := DBPing{gorm.Model{}, "pong"}
+	ping := model.DBPing{Pong: "pong"}
 	db := h.DB.Create(&ping)
 	return db.Error
 }
 
-func (h *DBPingHandler) Ping() DBPing {
-	var result DBPing
+func (h *DBPingHandler) Ping() model.DBPing {
+	var result model.DBPing
 	if IsNoRecord(h.DB.First(&result)) {
 		h.CreateDBPing()
 	}
