@@ -11,7 +11,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Template mainarea={<Home />} />} />
-        <Route path="/article" element={<Template mainarea={<Article />} />} />
+        <Route
+          path="/article/:id"
+          element={<Template mainarea={<Article />} />}
+        />
       </Routes>
     </BrowserRouter>
   );
