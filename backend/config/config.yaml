@@ -2,6 +2,7 @@
 
 exec_config:
   do_miguration: true
+  create_samples: true
 sql_config:
   user: 'root'
   pass: 'password'

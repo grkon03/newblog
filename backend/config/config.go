@@ -7,7 +7,8 @@ import (
 )
 
 type ExecConfig struct {
-	DoMigration bool `yaml:"do_miguration"`
+	DoMigration   bool `yaml:"do_miguration"`
+	CreateSamples bool `yaml:"create_samples"`
 }
 
 type SQLConfig struct {

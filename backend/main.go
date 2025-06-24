@@ -5,22 +5,28 @@ import (
 
 	"github.com/grkon03/newblog/backend/config"
 	"github.com/grkon03/newblog/backend/database"
+	"github.com/grkon03/newblog/backend/model"
 	"github.com/grkon03/newblog/backend/service"
 	"github.com/labstack/echo"
 )
 
 func main() {
-	apiconfig, err := config.NewAppConfig()
+	appconfig, err := config.NewAppConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	db, err := database.ConnectSQL(apiconfig.SQLConfig)
+	db, err := database.ConnectSQL(appconfig.SQLConfig)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	database.Migration(db)
+	if appconfig.DoMigration {
+		model.Migration(db)
+	}
+	if appconfig.CreateSamples {
+		model.CreateSamples(db)
+	}
 
 	api := service.NewAPI(db)
 
