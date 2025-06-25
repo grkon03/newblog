@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './article.module.css';
 import { GetArticle } from '../api/article';
-
-type ArticleInfo = {
-  title: string;
-  content: string;
-};
 
 const Article: React.FC = () => {
   const { id } = useParams();
