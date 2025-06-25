@@ -16,3 +16,10 @@ func NewArticleHandler(db *gorm.DB) *ArticleHandler {
 func (h *ArticleHandler) CreateArticle(title string, content string, writerID uint) error {
 	return h.DB.Create(&model.Article{Title: title, Content: content, WriterID: writerID}).Error
 }
+
+func (h *ArticleHandler) GetArticle(id uint) (*model.Article, error) {
+	var article model.Article
+	err := h.DB.Where("id = ?", id).First(&article).Error
+
+	return &article, err
+}

@@ -1,22 +1,27 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"time"
+)
 
 type DBPing struct {
-	gorm.Model
 	Pong string
 }
 
 type User struct {
-	gorm.Model
-	Username string
-	Passhash string
+	ID        uint      `gorm:"primarykey" json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Username  string    `json:"username"`
+	Passhash  string    `json:"passhash"`
 }
 
 type Article struct {
-	gorm.Model
-	Title    string
-	Content  string
-	WriterID uint
-	Writer   User `gorm:"foreignKey:WriterID"`
+	ID        uint      `gorm:"primarykey" json:"id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	Title     string    `json:"title"`
+	Content   string    `json:"content"`
+	WriterID  uint      `json:"writer_id"`
+	Writer    User      `gorm:"foreignKey:WriterID" json:"writer"`
 }

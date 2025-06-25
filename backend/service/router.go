@@ -7,8 +7,13 @@ func Routing(e *echo.Echo, api API) error {
 	{
 		ping := a.Group("/ping")
 		{
-			ping.GET("/", api.Ping)
-			ping.GET("/db", api.DBPing)
+			ping.GET("", api.PingAPI.Ping)
+			ping.GET("/db", api.PingAPI.DBPing)
+		}
+
+		article := a.Group("/article")
+		{
+			article.GET("/:id", api.ArticleAPI.GetArticle)
 		}
 	}
 
