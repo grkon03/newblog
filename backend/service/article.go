@@ -20,6 +20,7 @@ func (a *ArticleAPI) GetArticle(c echo.Context) error {
 	if err != nil {
 		log.Println(err.Error())
 		c.String(http.StatusBadRequest, "Bad request")
+		return err
 	}
 
 	article, err := a.h.GetArticle(id)
@@ -33,4 +34,41 @@ func (a *ArticleAPI) GetArticle(c echo.Context) error {
 	c.JSON(http.StatusOK, *article)
 	return nil
 
+}
+
+// ?from=xxx&count=xxx
+func (a *ArticleAPI) GetArticles(c echo.Context) error {
+	var from, count uint = 0, 0
+
+	param := c.QueryParam("from")
+	if param != "" {
+		from64, err := strconv.ParseInt(param, 10, 64)
+		if err != nil {
+			log.Println(err)
+			c.String(http.StatusBadRequest, "Bad request")
+			return err
+		}
+		from = uint(from64)
+	}
+
+	param = c.QueryParam("count")
+	if param != "" {
+		count64, err := strconv.ParseInt(param, 10, 64)
+		if err != nil {
+			log.Println(err)
+			c.String(http.StatusBadRequest, "Bad request")
+			return err
+		}
+		count = uint(count64)
+	}
+
+	articles, err := a.h.GetArticles(from, count)
+	if err != nil {
+		log.Println(err.Error())
+		c.String(http.StatusInternalServerError, err.Error())
+		return err
+	}
+
+	c.JSON(http.StatusOK, articles)
+	return nil
 }

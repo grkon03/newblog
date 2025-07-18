@@ -1,0 +1,27 @@
+.articlecard {
+  border: 1px solid #339;
+  border-radius: 8px;
+  padding: 1vw;
+  background: white;
+  margin: 0.5vh 0;
+  cursor: pointer;
+}
+
+.articlecard .title {
+  line-height: 0.3rem;
+  padding-bottom: 1.3vh;
+  border-bottom: 1px solid #aaf;
+  color: #339;
+}
+
+.articlecard:hover {
+  background: #fff9f9aa;
+}
+
+.description {
+  border: 1px solid #eee;
+  background: #f8f8f8;
+  margin: 1vh 0;
+  padding: 1vh 1vw;
+  font-size: 0.9rem;
+}

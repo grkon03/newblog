@@ -23,3 +23,9 @@ func (h *ArticleHandler) GetArticle(id uint) (*model.Article, error) {
 
 	return &article, err
 }
+
+func (h *ArticleHandler) GetArticles(from, count uint) ([]model.Article, error) {
+	var articles []model.Article
+	err := h.DB.Order("created_at desc").Offset(int(from)).Limit(int(count)).Find(&articles).Error
+	return articles, err
+}

@@ -17,11 +17,12 @@ type User struct {
 }
 
 type Article struct {
-	ID        uint      `gorm:"primarykey" json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	Title     string    `json:"title"`
-	Content   string    `json:"content"`
-	WriterID  uint      `json:"writer_id"`
-	Writer    User      `gorm:"foreignKey:WriterID" json:"writer"`
+	ID          uint      `gorm:"primarykey" json:"id"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+	Title       string    `json:"title"`
+	Content     string    `json:"content"`
+	Description string    `json:"description"`
+	WriterID    uint      `json:"writer_id"`
+	Writer      User      `gorm:"foreignKey:WriterID" json:"writer"`
 }

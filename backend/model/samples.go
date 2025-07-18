@@ -35,6 +35,9 @@ func createArticleSamples(db *gorm.DB) {
 			## さようなら
 			Good bye.
 		`,
+		Description: `
+			一つ目の記事です。
+		`,
 		WriterID: 1,
 	}
 
@@ -47,6 +50,9 @@ func createArticleSamples(db *gorm.DB) {
 			今日は晴れです
 			## 気分よくないね
 			今日は雨です
+		`,
+		Description: `
+			2つ目の記事です。いぇいいぇい。
 		`,
 		WriterID: 1,
 	}

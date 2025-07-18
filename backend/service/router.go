@@ -11,6 +11,8 @@ func Routing(e *echo.Echo, api API) error {
 			ping.GET("/db", api.PingAPI.DBPing)
 		}
 
+		a.GET("/articles", api.ArticleAPI.GetArticles)
+
 		article := a.Group("/article")
 		{
 			article.GET("/:id", api.ArticleAPI.GetArticle)
