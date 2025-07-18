@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import Header from './base-component/header';
 import Footer from './base-component/footer';
 import base from './base.module.css';
@@ -6,15 +6,15 @@ import ContentArea from './base-component/contentarea';
 import NotFound404 from './template/NotFound404';
 
 type Props = {
-  mainarea?: React.JSX.Element;
+  children?: ReactNode;
 };
 
-const Template: React.FC<Props> = ({ mainarea = <NotFound404 /> }) => {
+const Template: React.FC<Props> = ({ children = <NotFound404 /> }) => {
   return (
     <div className={base.page}>
       <React.Fragment>
         <Header />
-        <ContentArea mainarea={mainarea} />
+        <ContentArea>{children}</ContentArea>
         <Footer />
       </React.Fragment>
     </div>

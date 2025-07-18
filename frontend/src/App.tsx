@@ -10,10 +10,21 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Template mainarea={<Home />} />} />
+        <Route
+          path="/"
+          element={
+            <Template>
+              <Home />
+            </Template>
+          }
+        />
         <Route
           path="/article/:id"
-          element={<Template mainarea={<Article />} />}
+          element={
+            <Template>
+              <Article />
+            </Template>
+          }
         />
       </Routes>
     </BrowserRouter>
