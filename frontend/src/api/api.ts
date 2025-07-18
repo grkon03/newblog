@@ -28,6 +28,7 @@ class APIHandler {
       this.EndpointURL(endpoint),
       this.MakeRequest('GET')
     );
+
     return await res.json();
   }
 

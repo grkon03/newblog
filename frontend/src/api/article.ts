@@ -1,6 +1,5 @@
 import { API } from './api';
 import { User } from './user';
-import { useState, useEffect } from 'react';
 
 export type ArticleInfo = {
   id: number;
@@ -12,11 +11,6 @@ export type ArticleInfo = {
   writer: User;
 };
 
-export function GetArticle(id: string): ArticleInfo | null {
-  const [article, setArticle] = useState<ArticleInfo | null>(null);
-  API.GET<ArticleInfo>('/article/' + id)
-    .then((res) => setArticle(res))
-    .catch((err) => console.error(err));
-
-  return article;
+export async function GetArticle(id: string): Promise<ArticleInfo> {
+  return API.GET<ArticleInfo>('/article/' + id);
 }

@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './article.module.css';
-import { GetArticle } from '../api/article';
+import { API } from '../api/api';
+import { ArticleInfo, GetArticle } from '../api/article';
 
 const Article: React.FC = () => {
   const { id } = useParams();
-  const article = GetArticle(id as string);
+  const [article, setArticle] = useState<ArticleInfo>();
+
+  useEffect(() => {
+    if (id !== undefined) {
+      GetArticle(id)
+        .then((res) => setArticle(res))
+        .catch((err) => console.error(err));
+    }
+  });
 
   if (!article) {
     return <div>Loading content</div>;
