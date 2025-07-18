@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './article.module.css';
-import { API } from '../api/api';
 import { ArticleInfo, GetArticle } from '../api/article';
 
 const Article: React.FC = () => {
