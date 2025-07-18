@@ -13,11 +13,12 @@ func CreateSamples(db *gorm.DB) {
 
 func createUserSamples(db *gorm.DB) {
 	var user1 = User{
+		ID:       1,
 		Username: "grkon",
 		Passhash: "password",
 	}
 
-	res := db.Create(&user1)
+	res := db.FirstOrCreate(&user1)
 	if res.Error != nil {
 		log.Fatal(res.Error)
 	}
@@ -25,6 +26,7 @@ func createUserSamples(db *gorm.DB) {
 
 func createArticleSamples(db *gorm.DB) {
 	var article1 = Article{
+		ID:    1,
 		Title: "サンプル記事1",
 		Content: `
 			# サンプル1
@@ -37,6 +39,7 @@ func createArticleSamples(db *gorm.DB) {
 	}
 
 	var article2 = Article{
+		ID:    2,
 		Title: "サンプル記事2",
 		Content: `
 			# 今日の天気
@@ -48,11 +51,11 @@ func createArticleSamples(db *gorm.DB) {
 		WriterID: 1,
 	}
 
-	res := db.Create(&article1)
+	res := db.FirstOrCreate(&article1)
 	if res.Error != nil {
 		log.Fatal(res.Error)
 	}
-	res = db.Create(&article2)
+	res = db.FirstOrCreate(&article2)
 	if res.Error != nil {
 		log.Fatal(res.Error)
 	}
