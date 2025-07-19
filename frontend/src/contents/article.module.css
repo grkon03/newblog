@@ -1,0 +1,52 @@
+.articleHeader {
+  display: flex;
+  margin-bottom: 3vh;
+  padding: 3vh 3vw;
+  border-bottom: 1px solid #aae;
+}
+
+.thumbnail {
+  margin-right: 3vh;
+}
+
+.thumbnail img {
+  width: 30vh;
+}
+
+.headerText {
+  flex: 1;
+}
+
+.headerText h2 {
+  color: #339;
+}
+
+.articleContent {
+  background: white;
+  padding: 1vh 1vw;
+  border-radius: 10px;
+
+  h3 {
+    color: white;
+    border-left: 10px solid #336;
+    background: linear-gradient(to right, #88c, #ccf);
+    padding: 5px;
+    font-size: 2em;
+  }
+
+  h4 {
+    border-bottom: 1px solid #555;
+    color: #334;
+    font-size: 1.6em;
+  }
+
+  h5 {
+    color: #334;
+    font-size: 1.4em;
+  }
+
+  h6 {
+    color: #334;
+    font-size: 1.2em;
+  }
+}
