@@ -1,5 +1,6 @@
 import { API } from './api';
 import { User } from './user';
+import { Image } from './image';
 
 export type ArticleInfo = {
   id: number;
@@ -10,6 +11,8 @@ export type ArticleInfo = {
   description: string;
   writer_id: number;
   writer: User;
+  thumbnail_id: number;
+  thumbnail: Image;
 };
 
 export async function GetArticle(id: string): Promise<ArticleInfo> {

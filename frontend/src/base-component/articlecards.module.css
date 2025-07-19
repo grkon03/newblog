@@ -1,4 +1,5 @@
 .articlecard {
+  display: flex;
   border: 1px solid #339;
   border-radius: 8px;
   padding: 1vw;
@@ -24,4 +25,13 @@
   margin: 1vh 0;
   padding: 1vh 1vw;
   font-size: 0.9rem;
+}
+
+.thumbnail img {
+  margin-right: 1vw;
+  width: 15vw;
+}
+
+.textdetail {
+  flex: 1;
 }
