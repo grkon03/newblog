@@ -9,6 +9,7 @@ services:
     container_name: backend
     volumes:
       - ./backend/config/config.yaml:/nwb/config.yaml
+      - ./backend/images:/nwb/images
     depends_on:
       - sql
 

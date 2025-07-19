@@ -9,5 +9,6 @@ func Migration(db *gorm.DB) {
 		&DBPing{},
 		&User{},
 		&Article{},
+		&Image{},
 	)
 }

@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/grkon03/newblog/backend/database"
+	"github.com/grkon03/newblog/backend/service/repository"
 	"github.com/labstack/echo"
 )
 
 type ArticleAPI struct {
-	h *database.ArticleHandler
+	h repository.ArticleHandler
 }
 
 func (a *ArticleAPI) GetArticle(c echo.Context) error {
