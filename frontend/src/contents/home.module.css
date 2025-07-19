@@ -1,0 +1,24 @@
+@media (hover: hover) {
+  .moreArticleButton:hover {
+    background: white;
+    color: #66f;
+    transition: 0.1s;
+  }
+}
+
+.moreArticleButton {
+  -webkit-tap-highlight-color: transparent;
+  border: 5px solid #66f;
+  border-radius: 10px;
+  background: #66f;
+  cursor: pointer;
+  height: 6vh;
+  width: 20vw;
+  color: white;
+  font-weight: 700;
+  font-size: 1em;
+
+  &:active {
+    background: #f2f2f2;
+  }
+}

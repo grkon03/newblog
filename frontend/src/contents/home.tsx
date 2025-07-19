@@ -27,7 +27,12 @@ const Home: React.FC = () => {
       <div className={styles.articles}>
         <ArticleCards articles={articles} />
         <br />
-        <button onClick={onClickMoreArticleCards}>もっと記事を読み込む</button>
+        <button
+          className={styles.moreArticleButton}
+          onClick={onClickMoreArticleCards}
+        >
+          もっと記事を読み込む
+        </button>
       </div>
     </div>
   );
