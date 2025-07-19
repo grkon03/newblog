@@ -23,20 +23,26 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// initialize database
 	if appconfig.DoMigration {
 		model.Migration(db)
 	}
+	model.CreateMust(db)
 	if appconfig.CreateSamples {
 		model.CreateSamples(db)
 	}
 
+	// create api
 	api := service.NewAPI(db)
 
+	// set acceptables
 	e := echo.New()
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"http://localhost:3000"},
 		AllowMethods: []string{http.MethodGet, http.MethodPost, http.MethodPost, http.MethodDelete},
 	}))
+
+	// routing
 	err = service.Routing(e, api)
 
 	if err != nil {

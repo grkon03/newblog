@@ -38,7 +38,8 @@ func createArticleSamples(db *gorm.DB) {
 		Description: `
 			一つ目の記事です。
 		`,
-		WriterID: 1,
+		WriterID:    1,
+		ThumbnailID: 1,
 	}
 
 	var article2 = Article{
@@ -54,7 +55,8 @@ func createArticleSamples(db *gorm.DB) {
 		Description: `
 			2つ目の記事です。いぇいいぇい。
 		`,
-		WriterID: 1,
+		WriterID:    1,
+		ThumbnailID: 1,
 	}
 
 	res := db.FirstOrCreate(&article1)

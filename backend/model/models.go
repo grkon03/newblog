@@ -25,11 +25,15 @@ type Article struct {
 	Description string    `json:"description"`
 	WriterID    uint      `json:"writer_id"`
 	Writer      User      `gorm:"foreignKey:WriterID" json:"writer"`
+	ThumbnailID uint      `json:"thumbnail_id"`
+	Thumbnail   Image     `gorm:"foreignKey:ThumbnailID" json:"thumbnail"`
 }
 
+// actual path is /images/{path}
 type Image struct {
 	ID        uint      `gorm:"primarykey" json:"id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	Path      string    `json:"path"`
+	Keywords  string    `json:"keywords"`
 }

@@ -8,7 +8,7 @@ func Migration(db *gorm.DB) {
 	db.AutoMigrate(
 		&DBPing{},
 		&User{},
-		&Article{},
 		&Image{},
+		&Article{},
 	)
 }

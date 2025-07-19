@@ -17,6 +17,11 @@ func Routing(e *echo.Echo, api API) error {
 		{
 			article.GET("/:id", api.ArticleAPI.GetArticle)
 		}
+
+		image := a.Group("/image")
+		{
+			image.GET("/:id", api.ImageAPI.GetImage)
+		}
 	}
 
 	return nil
