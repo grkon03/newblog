@@ -10,11 +10,16 @@
 }
 
 .thumbnail img {
-  width: 30vh;
+  width: 23vw;
 }
 
 .headerText {
   flex: 1;
+}
+
+.headerText h2 {
+  font-size: 2em;
+  margin: 1vh 0;
 }
 
 .headerText h2 {
@@ -48,5 +53,16 @@
   h6 {
     color: #334;
     font-size: 1.2em;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .articleHeader {
+    display: block;
+    text-align: center;
+  }
+
+  .thumbnail img {
+    width: max(50vw, 100px);
   }
 }

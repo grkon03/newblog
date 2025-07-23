@@ -30,8 +30,12 @@ const ArticleCards: React.FC<Params> = ({ articles }) => {
           <div>
             <div className={styles.description}>{article.description}</div>
             <div>投稿者: {article.writer.username}</div>
-            <div>投稿日: {ConvertDateToJST(article.created_at)}</div>
-            <div>更新日: {ConvertDateToJST(article.updated_at)}</div>
+            <div className={styles.uploaded}>
+              投稿日: {ConvertDateToJST(article.created_at)}
+            </div>
+            <div className={styles.updated}>
+              更新日: {ConvertDateToJST(article.updated_at)}
+            </div>
           </div>
         </div>
       </div>

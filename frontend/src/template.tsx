@@ -14,7 +14,9 @@ const Template: React.FC<Props> = ({ children = <NotFound404 /> }) => {
     <div className={base.page}>
       <React.Fragment>
         <Header />
-        <ContentArea>{children}</ContentArea>
+        <div className={base.ContentArea}>
+          <ContentArea>{children}</ContentArea>
+        </div>
         <Footer />
       </React.Fragment>
     </div>
