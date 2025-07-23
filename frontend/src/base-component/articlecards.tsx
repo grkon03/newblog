@@ -29,6 +29,7 @@ const ArticleCards: React.FC<Params> = ({ articles }) => {
           <h3 className={styles.title}>{article.title}</h3>
           <div>
             <div className={styles.description}>{article.description}</div>
+            <div>投稿者: {article.writer.username}</div>
             <div>投稿日: {ConvertDateToJST(article.created_at)}</div>
             <div>更新日: {ConvertDateToJST(article.updated_at)}</div>
           </div>
