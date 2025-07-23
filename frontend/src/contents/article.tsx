@@ -31,6 +31,8 @@ const Article: React.FC = () => {
         </div>
         <div className={styles.headerText}>
           <h2>{article.title}</h2>
+          <div>{article.description}</div>
+          <br />
           <div>投稿日: {ConvertDateToJST(article.created_at)}</div>
           <div>更新日: {ConvertDateToJST(article.updated_at)}</div>
         </div>
