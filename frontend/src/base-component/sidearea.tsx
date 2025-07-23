@@ -2,8 +2,8 @@ import React from 'react';
 import styles from './sidearea.module.css';
 
 type Props = {
-  display_default_items?: boolean;
-  addItems?: () => React.JSX.Element[];
+  displayDefaultItems?: boolean;
+  items?: React.JSX.Element[];
 };
 
 const DefaultItems = (): React.JSX.Element[] => {
@@ -21,13 +21,13 @@ const DefaultItems = (): React.JSX.Element[] => {
 };
 
 const SideArea: React.FC<Props> = ({
-  display_default_items = true,
-  addItems = () => [],
+  displayDefaultItems = true,
+  items = [],
 }) => {
   return (
     <div className={styles.sidearea}>
-      {display_default_items ? DefaultItems() : []}
-      {addItems()}
+      {displayDefaultItems ? DefaultItems() : []}
+      {items}
     </div>
   );
 };
