@@ -2,9 +2,12 @@ package model
 
 import (
 	"log"
+	"os"
 
 	"gorm.io/gorm"
 )
+
+const samplesDir = "/nwb/samples"
 
 func CreateSamples(db *gorm.DB) {
 	createUserSamples(db)
@@ -18,40 +21,39 @@ func createUserSamples(db *gorm.DB) {
 		Passhash: "password",
 	}
 
-	res := db.FirstOrCreate(&user1)
+	res := db.Save(&user1)
 	if res.Error != nil {
 		log.Fatal(res.Error)
 	}
 }
 
 func createArticleSamples(db *gorm.DB) {
+	content, err := os.ReadFile(samplesDir + "/article1.md")
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
 	var article1 = Article{
-		ID:    1,
-		Title: "サンプル記事1",
-		Content: `
-			# サンプル1
-			## こんにちは
-			Hello World!
-			## さようなら
-			Good bye.
-		`,
+		ID:      1,
+		Title:   "サンプル記事1",
+		Content: string(content),
 		Description: `
-			一つ目の記事です。
+			1つ目の記事です。
 		`,
 		WriterID:    1,
 		ThumbnailID: 1,
 	}
 
+	content, err = os.ReadFile(samplesDir + "/article2.md")
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
 	var article2 = Article{
-		ID:    2,
-		Title: "サンプル記事2",
-		Content: `
-			# 今日の天気
-			## 気分いいね
-			今日は晴れです
-			## 気分よくないね
-			今日は雨です
-		`,
+		ID:      2,
+		Title:   "サンプル記事2",
+		Content: string(content),
 		Description: `
 			2つ目の記事です。いぇいいぇい。
 		`,
@@ -59,11 +61,11 @@ func createArticleSamples(db *gorm.DB) {
 		ThumbnailID: 1,
 	}
 
-	res := db.FirstOrCreate(&article1)
+	res := db.Save(&article1)
 	if res.Error != nil {
 		log.Fatal(res.Error)
 	}
-	res = db.FirstOrCreate(&article2)
+	res = db.Save(&article2)
 	if res.Error != nil {
 		log.Fatal(res.Error)
 	}

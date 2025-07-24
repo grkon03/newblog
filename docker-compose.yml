@@ -10,6 +10,7 @@ services:
     volumes:
       - ./backend/config/config.yaml:/nwb/config.yaml
       - ./backend/images:/nwb/images
+      - ./backend/samples:/nwb/samples
     depends_on:
       - sql
 

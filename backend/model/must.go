@@ -17,7 +17,7 @@ func createImages(db *gorm.DB) {
 		Keywords: "no image",
 	}
 
-	res := db.FirstOrCreate(&noimage)
+	res := db.Save(&noimage)
 	if res.Error != nil {
 		log.Fatal(res.Error)
 	}

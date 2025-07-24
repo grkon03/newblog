@@ -1,22 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import styles from './article.module.css';
 import { ArticleInfo, GetArticle } from '../api/article';
 import { ConvertDateToJST } from '../util/date';
 import { GetImageSrc } from '../api/image';
-import { CleanMarkdown, HeaderShift2 } from '../util/markdown';
+import {
+  CleanMarkdown,
+  rehypePlugins,
+  remarkPlugins,
+  ComponentsDefault,
+} from '../util/markdown';
 
 const Article: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [article, setArticle] = useState<ArticleInfo>();
+  const CD = ComponentsDefault(navigate);
+
   useEffect(() => {
     if (id !== undefined) {
       GetArticle(id)
         .then((res) => setArticle(res))
         .catch((err) => console.error(err));
     }
-  });
+  }, [id]);
 
   if (!article) {
     return <div>Loading content</div>;
@@ -39,7 +47,11 @@ const Article: React.FC = () => {
         </div>
       </div>
       <div className={styles.articleContent}>
-        <ReactMarkdown components={HeaderShift2}>
+        <ReactMarkdown
+          components={CD}
+          rehypePlugins={rehypePlugins}
+          remarkPlugins={remarkPlugins}
+        >
           {CleanMarkdown(article.content)}
         </ReactMarkdown>
       </div>
