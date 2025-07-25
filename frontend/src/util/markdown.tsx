@@ -1,4 +1,4 @@
-import { RefObject } from 'react';
+import React from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import type { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
@@ -6,6 +6,7 @@ import rehypeRaw from 'rehype-raw';
 import { API } from '../api/api';
 import { ArticleInfo } from '../api/article';
 import ArticleCards from '../base-component/articlecards';
+import styles from './markdown.module.css';
 
 export function extractArticleIDs(text: string): string[] {
   const regex = /\/article\/(\d+)/g;
@@ -21,14 +22,77 @@ export const remarkPlugins = [gfm];
 
 export const ComponentsDefault = (
   navigate: NavigateFunction,
-  refReferencedArticles: RefObject<Map<string, ArticleInfo>>
+  referencedArticles: Map<string, ArticleInfo>
 ): Components => {
   return {
-    h1: ({ children, ...props }) => <h3 {...props}> {children} </h3>,
-    h2: ({ children, ...props }) => <h4 {...props}> {children} </h4>,
-    h3: ({ children, ...props }) => <h5 {...props}> {children} </h5>,
-    h4: ({ children, ...props }) => <h6 {...props}> {children} </h6>,
-    h5: ({ children, ...props }) => <strong {...props}>{children}</strong>,
+    p: ({ children, ...props }) => {
+      const newNodes: React.JSX.Element[] = [];
+      const childarray = React.Children.toArray(children);
+      var refedArticles: ArticleInfo[] = [];
+
+      // search /aritcle links
+      childarray.forEach((node) => {
+        if (!React.isValidElement(node)) return;
+        const href = (
+          node.props as {
+            href?: string;
+          }
+        ).href;
+        if (href === undefined) return;
+
+        if (href.startsWith('/article/')) {
+          const id = href.substring(9);
+          const refedArticle = referencedArticles.get(id);
+          if (refedArticle !== undefined) {
+            refedArticles.push(refedArticle);
+          }
+        }
+      });
+
+      // if there is a only child of <a></a>, the <p></p> element will not be pushed
+      if (childarray.length !== 1 || refedArticles.length !== 1) {
+        newNodes.push(
+          <p {...props} key="paragraph">
+            {children}
+          </p>
+        );
+      }
+
+      newNodes.push(
+        <ArticleCards key="articlecards" articles={refedArticles} />
+      );
+
+      return <React.Fragment>{newNodes}</React.Fragment>;
+    },
+    h1: ({ children, ...props }) => (
+      <h3 className={styles.markdownHeading} {...props}>
+        {' '}
+        {children}{' '}
+      </h3>
+    ),
+    h2: ({ children, ...props }) => (
+      <h4 className={styles.markdownHeading} {...props}>
+        {' '}
+        {children}{' '}
+      </h4>
+    ),
+    h3: ({ children, ...props }) => (
+      <h5 className={styles.markdownHeading} {...props}>
+        {' '}
+        {children}{' '}
+      </h5>
+    ),
+    h4: ({ children, ...props }) => (
+      <h6 className={styles.markdownHeading} {...props}>
+        {' '}
+        {children}{' '}
+      </h6>
+    ),
+    h5: ({ children, ...props }) => (
+      <strong className={styles.markdownHeading} {...props}>
+        {children}
+      </strong>
+    ),
     img: ({ src, alt, ...props }) => {
       const isFromAPI = src !== undefined && src.startsWith('/');
       if (!isFromAPI) {
@@ -38,19 +102,11 @@ export const ComponentsDefault = (
       }
     },
     a: ({ href, children, ...props }) => {
-      const isArticle = href !== undefined && href.startsWith('/article');
       const isInternal = href !== undefined && href.startsWith('/');
       const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
         navigate(href as string);
       };
-      if (isArticle) {
-        const id = href.substring(9);
-        const refedArticle = refReferencedArticles.current.get(id);
-        if (refedArticle !== undefined) {
-          return <ArticleCards articles={[refedArticle]} />;
-        }
-      }
 
       return (
         <a

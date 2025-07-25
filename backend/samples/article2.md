@@ -38,6 +38,10 @@ $$
 これは[内部リンク](/article/1)
 これは[外部リンク](https://example.com)
 
+これは 1 行リンク ↓(カードが表示されて欲しい)
+
+[](/article/2)
+
 イメージ from API
 
 <img src="/image/1" width="300" />

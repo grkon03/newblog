@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import styles from './article.module.css';
@@ -17,10 +17,10 @@ const Article: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [article, setArticle] = useState<ArticleInfo>();
-  const refReferencedArticles = useRef<Map<string, ArticleInfo>>(
-    new Map<string, ArticleInfo>()
-  );
-  const CD = ComponentsDefault(navigate, refReferencedArticles);
+  const [referencedArticles, setReferencedArticles] = useState<
+    Map<string, ArticleInfo>
+  >(new Map<string, ArticleInfo>());
+  const CD = ComponentsDefault(navigate, referencedArticles);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -32,10 +32,15 @@ const Article: React.FC = () => {
 
   useEffect(() => {
     if (article !== undefined) {
+      setReferencedArticles(new Map<string, ArticleInfo>());
       extractArticleIDs(article.content).forEach((refedID) => {
-        GetArticle(refedID).then((res) =>
-          refReferencedArticles.current.set(refedID, res)
-        );
+        GetArticle(refedID).then((res) => {
+          setReferencedArticles((prev) => {
+            const newMap = new Map(prev);
+            newMap.set(refedID, res);
+            return newMap;
+          });
+        });
       });
     }
   }, [article]);

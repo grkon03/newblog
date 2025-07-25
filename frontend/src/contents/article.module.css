@@ -30,30 +30,6 @@
   background: white;
   padding: 1vh 1vw;
   border-radius: 10px;
-
-  h3 {
-    color: white;
-    border-left: 10px solid #336;
-    background: linear-gradient(to right, #88c, #ccf);
-    padding: 5px;
-    font-size: 2em;
-  }
-
-  h4 {
-    border-bottom: 1px solid #555;
-    color: #334;
-    font-size: 1.6em;
-  }
-
-  h5 {
-    color: #334;
-    font-size: 1.4em;
-  }
-
-  h6 {
-    color: #334;
-    font-size: 1.2em;
-  }
 }
 
 @media screen and (max-width: 800px) {

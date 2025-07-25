@@ -1,0 +1,23 @@
+h3.markdownHeading {
+  color: white;
+  border-left: 10px solid #336;
+  background: linear-gradient(to right, #88c, #ccf);
+  padding: 5px;
+  font-size: 2em;
+}
+
+h4.markdownHeading {
+  border-bottom: 1px solid #555;
+  color: #334;
+  font-size: 1.6em;
+}
+
+h5.markdownHeading {
+  color: #334;
+  font-size: 1.4em;
+}
+
+h6.markdownHeading {
+  color: #334;
+  font-size: 1.2em;
+}
