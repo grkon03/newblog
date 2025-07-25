@@ -3,6 +3,8 @@ import { NavigateFunction } from 'react-router-dom';
 import type { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 import { API } from '../api/api';
 import { ArticleInfo } from '../api/article';
 import ArticleCards from '../base-component/articlecards';
@@ -17,8 +19,8 @@ export function CleanMarkdown(origin: string): string {
   return origin;
 }
 
-export const rehypePlugins = [rehypeRaw];
-export const remarkPlugins = [gfm];
+export const remarkPlugins = [gfm, remarkMath];
+export const rehypePlugins = [rehypeRaw, rehypeKatex];
 
 export const ComponentsDefault = (
   navigate: NavigateFunction,

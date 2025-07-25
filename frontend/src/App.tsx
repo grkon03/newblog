@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Template from './template';
 import './whole.css';
+import 'katex/dist/katex.min.css';
 import Home from './contents/home';
 import Article from './contents/article';
 
