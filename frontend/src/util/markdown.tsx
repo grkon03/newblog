@@ -5,6 +5,8 @@ import gfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { API } from '../api/api';
 import { ArticleInfo } from '../api/article';
 import ArticleCards from '../base-component/articlecards';
@@ -118,6 +120,23 @@ export const ComponentsDefault = (
         >
           {children}
         </a>
+      );
+    },
+    code: ({ node, style, className, children, ref, ...props }) => {
+      const match = /language-(\w+)/.exec(className || '');
+      return match ? (
+        <SyntaxHighlighter
+          style={vscDarkPlus}
+          language={match[1]}
+          PreTag="div"
+          {...props}
+        >
+          {String(children).replace(/\n$/, '')}
+        </SyntaxHighlighter>
+      ) : (
+        <code className={`${styles.exceptedCode} ${className}`} {...props}>
+          {children}
+        </code>
       );
     },
   };

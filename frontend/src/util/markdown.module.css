@@ -21,3 +21,9 @@ h6.markdownHeading {
   color: #334;
   font-size: 1.2em;
 }
+
+.exceptedCode {
+  padding: 3px;
+  background: #ccc;
+  border-radius: 3px;
+}
