@@ -1,8 +1,16 @@
+import { RefObject } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import type { Components } from 'react-markdown';
 import gfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import { API } from '../api/api';
+import { ArticleInfo } from '../api/article';
+import ArticleCards from '../base-component/articlecards';
+
+export function extractArticleIDs(text: string): string[] {
+  const regex = /\/article\/(\d+)/g;
+  return Array.from(text.matchAll(regex)).map((m) => m[1]);
+}
 
 export function CleanMarkdown(origin: string): string {
   return origin;
@@ -11,7 +19,10 @@ export function CleanMarkdown(origin: string): string {
 export const rehypePlugins = [rehypeRaw];
 export const remarkPlugins = [gfm];
 
-export const ComponentsDefault = (navigate: NavigateFunction): Components => {
+export const ComponentsDefault = (
+  navigate: NavigateFunction,
+  refReferencedArticles: RefObject<Map<string, ArticleInfo>>
+): Components => {
   return {
     h1: ({ children, ...props }) => <h3 {...props}> {children} </h3>,
     h2: ({ children, ...props }) => <h4 {...props}> {children} </h4>,
@@ -27,11 +38,20 @@ export const ComponentsDefault = (navigate: NavigateFunction): Components => {
       }
     },
     a: ({ href, children, ...props }) => {
+      const isArticle = href !== undefined && href.startsWith('/article');
       const isInternal = href !== undefined && href.startsWith('/');
       const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
         navigate(href as string);
       };
+      if (isArticle) {
+        const id = href.substring(9);
+        const refedArticle = refReferencedArticles.current.get(id);
+        if (refedArticle !== undefined) {
+          return <ArticleCards articles={[refedArticle]} />;
+        }
+      }
+
       return (
         <a
           href={href}

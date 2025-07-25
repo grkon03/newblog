@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import styles from './article.module.css';
@@ -6,6 +6,7 @@ import { ArticleInfo, GetArticle } from '../api/article';
 import { ConvertDateToJST } from '../util/date';
 import { GetImageSrc } from '../api/image';
 import {
+  extractArticleIDs,
   CleanMarkdown,
   rehypePlugins,
   remarkPlugins,
@@ -16,7 +17,10 @@ const Article: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [article, setArticle] = useState<ArticleInfo>();
-  const CD = ComponentsDefault(navigate);
+  const refReferencedArticles = useRef<Map<string, ArticleInfo>>(
+    new Map<string, ArticleInfo>()
+  );
+  const CD = ComponentsDefault(navigate, refReferencedArticles);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -25,6 +29,16 @@ const Article: React.FC = () => {
         .catch((err) => console.error(err));
     }
   }, [id]);
+
+  useEffect(() => {
+    if (article !== undefined) {
+      extractArticleIDs(article.content).forEach((refedID) => {
+        GetArticle(refedID).then((res) =>
+          refReferencedArticles.current.set(refedID, res)
+        );
+      });
+    }
+  }, [article]);
 
   if (!article) {
     return <div>Loading content</div>;
