@@ -23,7 +23,11 @@ h6.markdownHeading {
 }
 
 .exceptedCode {
-  padding: 3px;
+  padding: 2px;
   background: #ccc;
   border-radius: 3px;
+}
+
+img {
+  max-width: 100%;
 }
