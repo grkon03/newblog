@@ -1,12 +1,15 @@
 const APIURL = 'http://localhost:3111/api';
 
+export type LoginRequest = {
+  username: string;
+  password: string;
+};
+
 class APIHandler {
   APIURL: string;
-  RequestTemplate: RequestInit;
 
-  constructor(apiurl: string, template: RequestInit) {
+  constructor(apiurl: string) {
     this.APIURL = apiurl;
-    this.RequestTemplate = template;
   }
 
   EndpointURL(endpoint: string): string {
@@ -14,8 +17,16 @@ class APIHandler {
   }
 
   MakeRequest<BodyType>(method: string, body?: BodyType): RequestInit {
-    var req = this.RequestTemplate;
-    req.method = method;
+    var headers = new Headers();
+    var token = localStorage.getItem('token');
+    headers.append('Authorization', `Bearer ${token}`);
+    headers.append('Content-Type', 'application/json');
+
+    var req: RequestInit = {
+      method: method,
+      headers: headers,
+    };
+
     if (body !== undefined) {
       req.body = JSON.stringify(body);
     }
@@ -39,10 +50,19 @@ class APIHandler {
     );
     return await res.json();
   }
+
+  async LOGIN(req: LoginRequest): Promise<boolean> {
+    const res = await fetch(
+      this.EndpointURL('/login'),
+      this.MakeRequest('POST', req)
+    );
+
+    if (res.ok) {
+      localStorage.setItem('token', await res.text());
+    }
+
+    return res.ok;
+  }
 }
 
-export const API = new APIHandler(APIURL, {
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+export const API = new APIHandler(APIURL);

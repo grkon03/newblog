@@ -25,7 +25,7 @@ type LoginRequest struct {
 
 func (a *UserAPI) Login(c echo.Context) error {
 	var req LoginRequest
-	if err := c.Bind(req); err != nil {
+	if err := c.Bind(&req); err != nil {
 		return c.String(http.StatusBadRequest, "Invalid request")
 	}
 

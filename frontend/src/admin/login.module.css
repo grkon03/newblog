@@ -1,0 +1,44 @@
+.login {
+  text-align: center;
+}
+
+.form {
+  display: inline-block;
+  width: min(800px, 90%);
+  padding: 10px;
+  background: white;
+  border: 1px solid #f3f3f3;
+
+  input {
+    margin: 10px;
+    width: 300px;
+    max-width: 95%;
+    font-size: 20px;
+  }
+
+  button {
+    margin: 10px;
+    height: 30px;
+    width: 100px;
+    max-width: 95%;
+    background: #cce;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    font-size: 15px;
+
+    @media (hover: hover) {
+      &:hover {
+        background: #aac;
+      }
+    }
+
+    &:active {
+      background: #99b;
+    }
+  }
+}
+
+.message {
+  margin: 20px 0;
+  color: #c41;
+}

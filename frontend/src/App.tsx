@@ -6,6 +6,7 @@ import './whole.css';
 import 'katex/dist/katex.min.css';
 import Home from './contents/home';
 import Article from './contents/article';
+import Login from './admin/login';
 
 function App() {
   return (
@@ -27,6 +28,14 @@ function App() {
             </Template>
           }
         />
+        <Route
+          path="/admin/login"
+          element={
+            <Template>
+              <Login />
+            </Template>
+          }
+        ></Route>
       </Routes>
     </BrowserRouter>
   );
