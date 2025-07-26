@@ -3,6 +3,7 @@ import Template from './template';
 import Home from './contents/home';
 import Article from './contents/article';
 import Login from './admin/login';
+import CreateArticle from './admin/createarticle';
 
 type RouteParam = {
   path: string;
@@ -31,6 +32,14 @@ export const MyRoutes: RouteParam[] = [
     elem: (
       <Template>
         <Login />
+      </Template>
+    ),
+  },
+  {
+    path: '/admin/createarticle',
+    elem: (
+      <Template>
+        <CreateArticle />
       </Template>
     ),
   },

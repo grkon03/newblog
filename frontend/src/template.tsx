@@ -1,12 +1,13 @@
-import React, { ReactNode } from 'react';
+import React, { ReactElement } from 'react';
 import Header from './base-component/header';
 import Footer from './base-component/footer';
 import base from './base.module.css';
 import ContentArea from './base-component/contentarea';
 import NotFound404 from './template/NotFound404';
+import { MainAreaProps } from './types';
 
 type Props = {
-  children?: ReactNode;
+  children?: ReactElement<{ mainareaprops: MainAreaProps }>;
 };
 
 const Template: React.FC<Props> = ({ children = <NotFound404 /> }) => {

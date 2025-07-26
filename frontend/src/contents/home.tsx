@@ -2,8 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { ArticleInfo, GetArticles } from '../api/article';
 import styles from './home.module.css';
 import ArticleCards from '../base-component/articlecards';
+import { MainAreaProps, SetSideArea } from '../types';
 
-const Home: React.FC = () => {
+type Props = {
+  mainareaprops?: MainAreaProps;
+};
+
+const Home: React.FC<Props> = ({ mainareaprops }) => {
+  SetSideArea(mainareaprops);
+
   const onestep = 10;
   const [articles, setArticles] = useState<ArticleInfo[]>([]);
   const [nextToLoad, setNextToLoad] = useState<number>(0);

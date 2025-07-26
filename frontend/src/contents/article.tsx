@@ -5,6 +5,7 @@ import styles from './article.module.css';
 import { ArticleInfo, GetArticle } from '../api/article';
 import { ConvertDateToJST } from '../util/date';
 import { GetImageSrc } from '../api/image';
+import { MainAreaProps, SetSideArea } from '../types';
 import {
   extractArticleIDs,
   CleanMarkdown,
@@ -13,7 +14,13 @@ import {
   ComponentsDefault,
 } from '../util/markdown';
 
-const Article: React.FC = () => {
+type Props = {
+  mainareaprops?: MainAreaProps;
+};
+
+const Article: React.FC<Props> = ({ mainareaprops }) => {
+  SetSideArea(mainareaprops);
+
   const navigate = useNavigate();
   const { id } = useParams();
   const [article, setArticle] = useState<ArticleInfo>();
