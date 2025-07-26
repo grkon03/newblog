@@ -33,7 +33,7 @@ func main() {
 	}
 
 	// create api
-	api := service.NewAPI(db)
+	api := service.NewAPI(db, appconfig.APIConfig)
 
 	// set acceptables
 	e := echo.New()

@@ -9,3 +9,5 @@ sql_config:
   host: 'sql'
   name: 'nwbdb'
   port: 3306
+api_config:
+  jwtkey: 'examplekeyJWT'

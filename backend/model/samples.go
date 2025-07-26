@@ -18,7 +18,7 @@ func createUserSamples(db *gorm.DB) {
 	var user1 = User{
 		ID:       1,
 		Username: "grkon",
-		Passhash: "password",
+		Passhash: "4b7479cd6f9d9efbd936b1b963dbec6a2a2961e89684d76d13b0e4abefaaa77f",
 	}
 
 	res := db.Save(&user1)

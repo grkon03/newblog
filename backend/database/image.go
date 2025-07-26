@@ -18,3 +18,15 @@ func (h *ImageHandler) GetImage(id uint) (*model.Image, error) {
 
 	return &im, nil
 }
+
+func (h *ImageHandler) PostImage(path, keywords string) (*model.Image, error) {
+	var im model.Image
+	im.Path = path
+	im.Keywords = keywords
+	err := h.DB.Create(im).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &im, nil
+}

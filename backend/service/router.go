@@ -1,8 +1,12 @@
 package service
 
-import "github.com/labstack/echo"
+import (
+	"github.com/labstack/echo"
+)
 
 func Routing(e *echo.Echo, api API) error {
+	userauth := api.JWT.user.JWTUserMiddleware()
+
 	a := e.Group("/api")
 	{
 		ping := a.Group("/ping")
@@ -21,6 +25,14 @@ func Routing(e *echo.Echo, api API) error {
 		image := a.Group("/image")
 		{
 			image.GET("/:id", api.ImageAPI.GetImage)
+		}
+
+		a.POST("/login", api.UserAPI.Login)
+
+		admin := a.Group("/auth")
+		admin.Use(userauth)
+		{
+			admin.POST("/image", api.ImageAPI.PostImage)
 		}
 	}
 

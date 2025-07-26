@@ -19,9 +19,14 @@ type SQLConfig struct {
 	Port int    `yaml:"port"`
 }
 
+type APIConfig struct {
+	JWTKey string `yaml:"jwtkey"`
+}
+
 type AppConfig struct {
 	ExecConfig `yaml:"exec_config"`
 	SQLConfig  `yaml:"sql_config"`
+	APIConfig  `yaml:"api_config"`
 }
 
 const (
