@@ -42,13 +42,13 @@ func (j *JWTUser) NewJWTFunc(c echo.Context) jwt.Claims {
 }
 
 type JWTUserClaims struct {
-	ID uint `json:"ID"`
+	UserID uint `json:"UserID"`
 	jwt.StandardClaims
 }
 
 func newJWTUserClaims(id uint) JWTUserClaims {
 	return JWTUserClaims{
-		ID: id,
+		UserID: id,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().AddDate(0, 6, 0).Unix(),
 		},

@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/grkon03/newblog/backend/model"
 	"github.com/grkon03/newblog/backend/service/repository"
 	"github.com/labstack/echo"
 )
@@ -71,4 +72,31 @@ func (a *ArticleAPI) GetArticles(c echo.Context) error {
 
 	c.JSON(http.StatusOK, articles)
 	return nil
+}
+
+func (a *ArticleAPI) PostArticle(c echo.Context) error {
+	claims, err := GetJWTUserClaims(c)
+	if err != nil {
+		return c.String(http.StatusUnauthorized, "please login")
+	}
+	writerID := claims.UserID
+
+	var article model.Article
+
+	err = c.Bind(&article)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "bad request")
+	}
+
+	err = a.h.CreateArticle(
+		article.Title,
+		article.Content,
+		article.Description,
+		writerID,
+		article.ThumbnailID)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.String(http.StatusOK, "success")
 }
