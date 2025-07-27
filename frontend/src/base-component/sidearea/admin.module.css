@@ -1,0 +1,22 @@
+.menu {
+  .menuitem {
+    background: #f8f8f8;
+    color: #555;
+    border: 3px solid #666;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+
+    @media (hover: hover) {
+      &:hover {
+        background: #666;
+        color: #ddd;
+        transition: 0.1s;
+      }
+    }
+
+    &:active {
+      background: #557;
+    }
+  }
+}

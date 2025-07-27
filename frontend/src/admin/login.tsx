@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { API, LoginRequest } from '../api/api';
 import styles from './login.module.css';
+import { MainAreaProps, InitSideArea } from '../types';
 
-const Login: React.FC = () => {
+type Props = {
+  mainareaprops?: MainAreaProps;
+};
+
+const Login: React.FC<Props> = ({ mainareaprops }) => {
+  InitSideArea(mainareaprops);
+
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [message, setMessage] = useState<string>('');
