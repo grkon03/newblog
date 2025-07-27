@@ -1,5 +1,5 @@
 import React from 'react';
-import { MainAreaProps, SetSideArea } from '../types';
+import { MainAreaProps, InitSideArea } from '../types';
 import styles from './NotFound404.module.css';
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
 };
 
 const NotFound404: React.FC<Props> = ({ mainareaprops }) => {
-  SetSideArea(mainareaprops);
+  InitSideArea(mainareaprops);
 
   return (
     <div className={styles.nf404}>

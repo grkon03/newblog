@@ -12,6 +12,10 @@ type RouteParam = {
 
 export const MyRoutes: RouteParam[] = [
   {
+    path: '/*',
+    elem: <Template></Template>,
+  },
+  {
     path: '/',
     elem: (
       <Template>

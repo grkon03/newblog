@@ -1,19 +1,17 @@
 import React, { ReactElement, useEffect } from 'react';
+import { NormalSA } from './base-component/sidearea/normal';
 
 // mainareaprops?: MainAreaProps should be contained in children of <ContentArea>{chlidren}</ContentArea>
 export type MainAreaProps = {
-  setSideAreaItems: (items: React.JSX.Element[]) => void;
+  setSideAreaItems: React.Dispatch<ReactElement[]>;
   isUpdatedSideArea: boolean;
   setIsUpdatedSideArea: (val: boolean) => void;
 };
 
-export function SetSideArea(p?: MainAreaProps, elements?: ReactElement[]) {
-  console.log('test1');
-  console.log(p);
+export function InitSideArea(p?: MainAreaProps, elements?: ReactElement[]) {
   useEffect(() => {
-    console.log('test2');
     if (p !== undefined && !p.isUpdatedSideArea) {
-      p.setSideAreaItems(elements ?? []);
+      p.setSideAreaItems(elements ?? NormalSA);
       p.setIsUpdatedSideArea(true);
     }
   }, [p, elements]);

@@ -1,14 +1,13 @@
 import React from 'react';
-import { MainAreaProps, SetSideArea } from '../types';
+import { MainAreaProps, InitSideArea } from '../types';
+import { AdminSA } from '../base-component/sidearea/admin';
 
 type Props = {
   mainareaprops?: MainAreaProps;
 };
 
-const sa = [<div>test</div>];
-
 const CreateArticle: React.FC<Props> = ({ mainareaprops }) => {
-  SetSideArea(mainareaprops, sa);
+  InitSideArea(mainareaprops, AdminSA);
   return <div></div>;
 };
 
