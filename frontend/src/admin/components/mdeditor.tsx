@@ -1,24 +1,38 @@
-import React, { useState, useRef, DragEvent } from 'react';
+import React, { useState, useRef, DragEvent, useLayoutEffect } from 'react';
 import { IsImage } from '../../util/image';
+import MDELogic from './mdelogic';
 import styles from './mdeditor.module.css';
 
+type MDESettings = {
+  TabSpaces: number;
+};
+
 const MDEditor: React.FC = () => {
-  const [MDstring, setMDstring] = useState('');
+  const refMDESettings = useRef<MDESettings>({
+    TabSpaces: 2,
+  });
+
+  const [textareaState, setTextAreaState] = useState(MDELogic.initial());
   const [, setImages] = useState<File[]>([]);
   const [message, setMessage] = useState<string>('');
-  const refTextarea = useRef<HTMLTextAreaElement>(null);
+  const refTextArea = useRef<HTMLTextAreaElement>(null);
+
+  useLayoutEffect(() => {
+    if (!refTextArea.current) return;
+    refTextArea.current.selectionStart = textareaState.selectionStart;
+    refTextArea.current.selectionEnd = textareaState.selectionEnd;
+  }, [textareaState.selectionStart, textareaState.selectionEnd]);
 
   const handleDrop = (e: DragEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
-    const textarea = refTextarea.current;
+    const textarea = refTextArea.current;
 
     if (files.length === 0) return;
     if (!textarea) return;
 
     setImages((prev) => [...prev, ...files]);
 
-    const cursorPos = textarea.selectionStart;
     const imageText = files
       .filter((file) => {
         const isImage = IsImage(file);
@@ -30,32 +44,53 @@ const MDEditor: React.FC = () => {
       .map((file) => `![](${file.name})`)
       .join('\n');
 
-    const before = MDstring.slice(0, cursorPos);
-    const after = MDstring.slice(cursorPos);
-    const newMDstring = before + imageText + after;
-
-    setMDstring(newMDstring);
-
-    setTimeout(() => {
-      const newCursorpos = before.length + imageText.length;
-      textarea.selectionStart = textarea.selectionEnd = newCursorpos;
-      textarea.focus();
-    }, 0);
+    setTextAreaState(
+      MDELogic.InsertText(
+        textarea.selectionStart,
+        textareaState.text,
+        imageText
+      )
+    );
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const textarea = refTextArea.current;
+    if (!textarea) return;
+    const selectionStart = textarea.selectionStart;
+    const selectionEnd = textarea.selectionEnd;
+    switch (e.key) {
+      case 'Tab':
+        e.preventDefault();
+
+        setTextAreaState(
+          MDELogic.InsertTab(
+            selectionStart,
+            selectionEnd,
+            textareaState.text,
+            refMDESettings.current.TabSpaces
+          )
+        );
+    }
+  };
+
   return (
     <div>
       <textarea
-        ref={refTextarea}
+        ref={refTextArea}
         className={styles.editarea}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        value={MDstring}
-        onChange={(e) => setMDstring(e.target.value)}
+        onKeyDown={handleKeyDown}
+        value={textareaState.text}
+        onChange={(e) =>
+          setTextAreaState((prev) =>
+            MDELogic.updateText(textareaState, e.target.value)
+          )
+        }
       ></textarea>
       <div>{message}</div>
     </div>
