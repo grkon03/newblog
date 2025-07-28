@@ -40,12 +40,12 @@ export function InsertText(
   return state(before + insertText + after, pos + insertText.length);
 }
 
-// returns [before, selectedlines, after]
+// returns [beforelines, selectedlines, afterlines]
 export function SelectedLines(
   selectionStart: number,
   selectionEnd: number,
   text: string
-): [string, string[], string] {
+): [string[], string[], string[]] {
   var beforelines: string[] = [];
   var selectedlines: string[] = [];
   var afterlines: string[] = [];
@@ -63,10 +63,7 @@ export function SelectedLines(
     count += length;
   });
 
-  const before = beforelines.join('\n');
-  const after = afterlines.join('\n');
-
-  return [before, selectedlines, after];
+  return [beforelines, selectedlines, afterlines];
 }
 
 export function InsertTextToHeadsOfSelectedLines(
@@ -81,14 +78,10 @@ export function InsertTextToHeadsOfSelectedLines(
     text
   );
 
-  const updated = selectedlines.map((line) => insertText + line).join('\n');
-  var composed: string[] = [];
-  if (before !== '') composed.push(before);
-  composed.push(updated);
-  if (after !== '') composed.push(after);
+  const updated = selectedlines.map((line) => insertText + line);
 
   return state(
-    composed.join('\n'),
+    [...before, ...updated, ...after].join('\n'),
     selectionStart + insertText.length,
     selectionEnd + insertText.length * selectedlines.length
   );
