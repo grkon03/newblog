@@ -15,6 +15,7 @@ const MDEditor: React.FC = () => {
   });
 
   const [history, setHistory] = useState<TextAreaState[]>([]);
+  const [undoHistory, setUndoHistory] = useState<TextAreaState[]>([]);
   const [textareaState, _setTextAreaState] = useState(MDELogic.initial());
   const [, setImages] = useState<File[]>([]);
   const [message, setMessage] = useState<string>('');
@@ -26,8 +27,10 @@ const MDEditor: React.FC = () => {
     _setTextAreaState(s);
     if (history.length > MaxHistoryLength) {
       setHistory((prev) => [...prev.slice(1), textareaState]);
+      setUndoHistory([]);
     } else {
       setHistory((prev) => [...prev, textareaState]);
+      setUndoHistory([]);
     }
   };
 
@@ -38,9 +41,19 @@ const MDEditor: React.FC = () => {
   }, [textareaState.selectionStart, textareaState.selectionEnd]);
 
   const undo = () => {
-    const prev = history.pop();
-    if (!prev) return;
-    _setTextAreaState(prev);
+    const head = history.at(-1);
+    if (!head) return;
+    _setTextAreaState(head);
+    setHistory((prev) => prev.slice(0, -1));
+    setUndoHistory((prev) => [...prev, head]);
+  };
+
+  const redo = () => {
+    const head = undoHistory.at(-1);
+    if (!head) return;
+    _setTextAreaState(head);
+    setHistory((prev) => [...prev, head]);
+    setUndoHistory((prev) => prev.slice(0, -1));
   };
 
   const handleDrop = (e: DragEvent<HTMLTextAreaElement>) => {
@@ -86,8 +99,13 @@ const MDEditor: React.FC = () => {
     if (e.ctrlKey || e.metaKey) {
       switch (e.key) {
         case 'z':
-          e.preventDefault();
-          undo();
+          if (e.shiftKey) {
+            e.preventDefault();
+            redo();
+          } else {
+            e.preventDefault();
+            undo();
+          }
       }
     } else {
       switch (e.key) {
