@@ -134,7 +134,7 @@ export function DeleteTab(
   const updated = selectedlines.map((line) => {
     if (line.startsWith(TabString(tabspaces))) {
       deletecount++;
-      return line.slice(2);
+      return line.slice(tabspaces);
     } else {
       return line;
     }
@@ -166,6 +166,31 @@ export function DeleteTab(
   );
 }
 
+function lastline(text: string): string {
+  return text.split('\n').at(-1) ?? '';
+}
+
+function extractTabs(line: string, tabspaces: number): string {
+  var tabs: string = '';
+  const tab = TabString(tabspaces);
+  while (line.startsWith(tab)) {
+    tabs += tab;
+    line = line.slice(tabspaces);
+  }
+
+  return tabs;
+}
+
+export function LineBreakWithTab(
+  pos: number,
+  text: string,
+  tabspaces: number
+): TextAreaState {
+  const [before, after] = Divide(pos, text);
+  const tabs = extractTabs(lastline(before), tabspaces);
+  return state(before + '\n' + tabs + after, pos + ('\n' + tabs).length);
+}
+
 const MDELogic = {
   initial,
   updateText,
@@ -176,6 +201,7 @@ const MDELogic = {
   TabString,
   InsertTab,
   DeleteTab,
+  LineBreakWithTab,
 };
 
 export default MDELogic;

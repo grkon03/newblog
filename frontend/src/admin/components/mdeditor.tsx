@@ -24,14 +24,22 @@ const MDEditor: React.FC = () => {
   const setTextAreaState: React.Dispatch<
     React.SetStateAction<TextAreaState>
   > = (s) => {
-    _setTextAreaState(s);
+    // to avoid to trigger useLayoutEffect, set selection manually
+    const stateToStore: TextAreaState = ((s) => {
+      const textarea = refTextArea.current;
+      if (!textarea) return s;
+      s.selectionStart = textarea.selectionStart;
+      s.selectionEnd = textarea.selectionEnd;
+      return s;
+    })(textareaState);
     if (history.length > MaxHistoryLength) {
-      setHistory((prev) => [...prev.slice(1), textareaState]);
+      setHistory((prev) => [...prev.slice(1), stateToStore]);
       setRedoStack([]);
     } else {
-      setHistory((prev) => [...prev, textareaState]);
+      setHistory((prev) => [...prev, stateToStore]);
       setRedoStack([]);
     }
+    _setTextAreaState(s);
   };
 
   useLayoutEffect(() => {
@@ -130,6 +138,16 @@ const MDEditor: React.FC = () => {
               )
             );
           }
+          break;
+        case 'Enter':
+          e.preventDefault();
+          setTextAreaState(
+            MDELogic.LineBreakWithTab(
+              selectionStart,
+              textareaState.text,
+              refMDESettings.current.TabSpaces
+            )
+          );
           break;
       }
     }
