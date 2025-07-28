@@ -1,7 +1,9 @@
-import React, { useState, useRef, DragEvent, useLayoutEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect, DragEvent } from 'react';
 import { IsImage } from '../../util/image';
-import MDELogic from './mdelogic';
+import MDELogic, { TextAreaState } from './mdelogic';
 import styles from './mdeditor.module.css';
+
+const MaxHistoryLength = 100;
 
 type MDESettings = {
   TabSpaces: number;
@@ -12,16 +14,34 @@ const MDEditor: React.FC = () => {
     TabSpaces: 2,
   });
 
-  const [textareaState, setTextAreaState] = useState(MDELogic.initial());
+  const [history, setHistory] = useState<TextAreaState[]>([]);
+  const [textareaState, _setTextAreaState] = useState(MDELogic.initial());
   const [, setImages] = useState<File[]>([]);
   const [message, setMessage] = useState<string>('');
   const refTextArea = useRef<HTMLTextAreaElement>(null);
+
+  const setTextAreaState: React.Dispatch<
+    React.SetStateAction<TextAreaState>
+  > = (s) => {
+    _setTextAreaState(s);
+    if (history.length > MaxHistoryLength) {
+      setHistory((prev) => [...prev.slice(1), textareaState]);
+    } else {
+      setHistory((prev) => [...prev, textareaState]);
+    }
+  };
 
   useLayoutEffect(() => {
     if (!refTextArea.current) return;
     refTextArea.current.selectionStart = textareaState.selectionStart;
     refTextArea.current.selectionEnd = textareaState.selectionEnd;
   }, [textareaState.selectionStart, textareaState.selectionEnd]);
+
+  const undo = () => {
+    const prev = history.pop();
+    if (!prev) return;
+    _setTextAreaState(prev);
+  };
 
   const handleDrop = (e: DragEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
@@ -62,18 +82,27 @@ const MDEditor: React.FC = () => {
     if (!textarea) return;
     const selectionStart = textarea.selectionStart;
     const selectionEnd = textarea.selectionEnd;
-    switch (e.key) {
-      case 'Tab':
-        e.preventDefault();
 
-        setTextAreaState(
-          MDELogic.InsertTab(
-            selectionStart,
-            selectionEnd,
-            textareaState.text,
-            refMDESettings.current.TabSpaces
-          )
-        );
+    if (e.ctrlKey || e.metaKey) {
+      switch (e.key) {
+        case 'z':
+          e.preventDefault();
+          undo();
+      }
+    } else {
+      switch (e.key) {
+        case 'Tab':
+          e.preventDefault();
+
+          setTextAreaState(
+            MDELogic.InsertTab(
+              selectionStart,
+              selectionEnd,
+              textareaState.text,
+              refMDESettings.current.TabSpaces
+            )
+          );
+      }
     }
   };
 
