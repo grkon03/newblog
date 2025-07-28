@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MDEditor from './components/mdeditor';
 import { MainAreaProps, InitSideArea } from '../types';
 import { AdminSA } from '../base-component/sidearea/admin';
@@ -9,11 +9,13 @@ type Props = {
 
 const CreateArticle: React.FC<Props> = ({ mainareaprops }) => {
   InitSideArea(mainareaprops, AdminSA);
+  const [, setMDtext] = useState('');
+  const [, setUploadedImages] = useState<File[]>([]);
   return (
     <div>
       <h2>記事を作成する</h2>
       <div>
-        <MDEditor />
+        <MDEditor setText={setMDtext} setImages={setUploadedImages} />
       </div>
     </div>
   );

@@ -1,4 +1,10 @@
-import React, { useState, useRef, useLayoutEffect, DragEvent } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+  DragEvent,
+} from 'react';
 import { IsImage } from '../../util/image';
 import MDELogic, { TextAreaState } from './mdelogic';
 import styles from './mdeditor.module.css';
@@ -9,7 +15,12 @@ type MDESettings = {
   TabSpaces: number;
 };
 
-const MDEditor: React.FC = () => {
+type Props = {
+  setText: React.Dispatch<React.SetStateAction<string>>;
+  setImages: React.Dispatch<React.SetStateAction<File[]>>;
+};
+
+const MDEditor: React.FC<Props> = ({ setText, setImages }) => {
   const refMDESettings = useRef<MDESettings>({
     TabSpaces: 2,
   });
@@ -17,7 +28,7 @@ const MDEditor: React.FC = () => {
   const [history, setHistory] = useState<TextAreaState[]>([]);
   const [redostack, setRedoStack] = useState<TextAreaState[]>([]);
   const [textareaState, _setTextAreaState] = useState(MDELogic.initial());
-  const [, setImages] = useState<File[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   const [message, setMessage] = useState<string>('');
   const refTextArea = useRef<HTMLTextAreaElement>(null);
 
@@ -41,6 +52,13 @@ const MDEditor: React.FC = () => {
     }
     _setTextAreaState(s);
   };
+
+  useEffect(() => {
+    setText(textareaState.text);
+  }, [setText, textareaState.text]);
+  useEffect(() => {
+    setImages(uploadedImages);
+  }, [setImages, uploadedImages]);
 
   useLayoutEffect(() => {
     if (!refTextArea.current) return;
@@ -72,7 +90,7 @@ const MDEditor: React.FC = () => {
     if (files.length === 0) return;
     if (!textarea) return;
 
-    setImages((prev) => [...prev, ...files]);
+    setUploadedImages((prev) => [...prev, ...files]);
 
     const imageText = files
       .filter((file) => {
