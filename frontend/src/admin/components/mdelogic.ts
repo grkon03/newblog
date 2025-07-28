@@ -109,6 +109,63 @@ export function InsertTab(
   }
 }
 
+function sumlengthWithBreak(lines: string[]): number {
+  if (lines.length === 0) return 0;
+  else return lines.map((line) => line.length + 1).reduce((a, b) => a + b);
+}
+
+export function DeleteTab(
+  selectionStart: number,
+  selectionEnd: number,
+  text: string,
+  tabspaces: number
+): TextAreaState {
+  const [beforelines, selectedlines, afterlines] = SelectedLines(
+    selectionStart,
+    selectionEnd,
+    text
+  );
+
+  const isTabOfFirstLineDeleted = selectedlines[0].startsWith(
+    TabString(tabspaces)
+  );
+  var deletecount = 0;
+
+  const updated = selectedlines.map((line) => {
+    if (line.startsWith(TabString(tabspaces))) {
+      deletecount++;
+      return line.slice(2);
+    } else {
+      return line;
+    }
+  });
+
+  const selectionStartNextPre = isTabOfFirstLineDeleted
+    ? selectionStart - tabspaces
+    : selectionStart;
+  const selectionEndNextPre = selectionEnd - tabspaces * deletecount;
+  const selectionStartNextGuarantee = sumlengthWithBreak(beforelines);
+  const selectionEndNextGuarantee = sumlengthWithBreak([
+    ...beforelines,
+    ...updated.slice(0, -1),
+  ]);
+
+  const selectionStartNext = Math.max(
+    selectionStartNextPre,
+    selectionStartNextGuarantee
+  );
+  const selectionEndNext = Math.max(
+    selectionEndNextPre,
+    selectionEndNextGuarantee
+  );
+
+  return state(
+    [...beforelines, ...updated, ...afterlines].join('\n'),
+    selectionStartNext,
+    selectionEndNext
+  );
+}
+
 const MDELogic = {
   initial,
   updateText,
@@ -118,6 +175,7 @@ const MDELogic = {
   InsertTextToHeadsOfSelectedLines,
   TabString,
   InsertTab,
+  DeleteTab,
 };
 
 export default MDELogic;

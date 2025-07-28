@@ -99,27 +99,38 @@ const MDEditor: React.FC = () => {
     if (e.ctrlKey || e.metaKey) {
       switch (e.key) {
         case 'z':
+          e.preventDefault();
           if (e.shiftKey) {
-            e.preventDefault();
             redo();
           } else {
-            e.preventDefault();
             undo();
           }
+          break;
       }
     } else {
       switch (e.key) {
         case 'Tab':
           e.preventDefault();
-
-          setTextAreaState(
-            MDELogic.InsertTab(
-              selectionStart,
-              selectionEnd,
-              textareaState.text,
-              refMDESettings.current.TabSpaces
-            )
-          );
+          if (e.shiftKey) {
+            setTextAreaState(
+              MDELogic.DeleteTab(
+                selectionStart,
+                selectionEnd,
+                textareaState.text,
+                refMDESettings.current.TabSpaces
+              )
+            );
+          } else {
+            setTextAreaState(
+              MDELogic.InsertTab(
+                selectionStart,
+                selectionEnd,
+                textareaState.text,
+                refMDESettings.current.TabSpaces
+              )
+            );
+          }
+          break;
       }
     }
   };
