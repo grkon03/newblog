@@ -210,7 +210,7 @@ export function InsertImages(
   if (uploaded.length === 0) return state(text, pos);
 
   var message: string[] = [];
-  var newImages = previousImages;
+  var newImages = new Map(previousImages);
 
   const imageText = uploaded
     .filter((file) => {
