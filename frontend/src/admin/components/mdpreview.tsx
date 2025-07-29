@@ -4,9 +4,10 @@ import styles from './mdpreview.module.css';
 
 type Props = {
   MDtext: string;
+  images: Map<string, File>;
 };
 
-const MDPreview: React.FC<Props> = ({ MDtext }) => {
+const MDPreview: React.FC<Props> = ({ MDtext, images }) => {
   return (
     <div className={styles.preview}>
       <MyMarkdown>{MDtext}</MyMarkdown>

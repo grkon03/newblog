@@ -14,7 +14,9 @@ type SelectedTab = 'editor' | 'preview';
 const CreateArticle: React.FC<Props> = ({ mainareaprops }) => {
   InitSideArea(mainareaprops, AdminSA);
   const [MDtext, setMDtext] = useState('');
-  const [, setUploadedImages] = useState<File[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<Map<string, File>>(
+    new Map<string, File>()
+  );
   const [selectedTab, setSelectedTab] = useState<SelectedTab>('editor');
   const handleClickTabSwitch = (s: SelectedTab) => () => {
     setSelectedTab(s);
@@ -47,7 +49,7 @@ const CreateArticle: React.FC<Props> = ({ mainareaprops }) => {
           <MDEditor setText={setMDtext} setImages={setUploadedImages} />
         </div>
         <div className={`${styles.preview} ${styles['s__' + selectedTab]}`}>
-          <MDPreview MDtext={MDtext} />
+          <MDPreview MDtext={MDtext} images={uploadedImages} />
         </div>
       </div>
     </div>

@@ -17,7 +17,7 @@ type MDESettings = {
 
 type Props = {
   setText: React.Dispatch<React.SetStateAction<string>>;
-  setImages: React.Dispatch<React.SetStateAction<File[]>>;
+  setImages: React.Dispatch<React.SetStateAction<Map<string, File>>>;
 };
 
 const MDEditor: React.FC<Props> = ({ setText, setImages }) => {
@@ -28,7 +28,9 @@ const MDEditor: React.FC<Props> = ({ setText, setImages }) => {
   const [history, setHistory] = useState<TextAreaState[]>([]);
   const [redostack, setRedoStack] = useState<TextAreaState[]>([]);
   const [textareaState, _setTextAreaState] = useState(MDELogic.initial());
-  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<Map<string, File>>(
+    new Map<string, File>()
+  );
   const [message, setMessage] = useState<string>('');
   const refTextArea = useRef<HTMLTextAreaElement>(null);
 
@@ -87,27 +89,16 @@ const MDEditor: React.FC<Props> = ({ setText, setImages }) => {
     const files = Array.from(e.dataTransfer.files);
     const textarea = refTextArea.current;
 
-    if (files.length === 0) return;
     if (!textarea) return;
 
-    setUploadedImages((prev) => [...prev, ...files]);
-
-    const imageText = files
-      .filter((file) => {
-        const isImage = IsImage(file);
-        if (!isImage) {
-          setMessage('画像以外をアップロードしないでください。');
-        }
-        return isImage;
-      })
-      .map((file) => `![](${file.name})`)
-      .join('\n');
-
     setTextAreaState(
-      MDELogic.InsertText(
+      MDELogic.InsertImages(
         textarea.selectionStart,
         textareaState.text,
-        imageText
+        files,
+        uploadedImages,
+        setUploadedImages,
+        setMessage
       )
     );
   };
