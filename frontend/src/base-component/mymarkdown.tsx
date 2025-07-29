@@ -11,21 +11,21 @@ import {
 
 type Props = {
   children?: string;
-  article?: ArticleInfo;
+  localImageURLs?: Map<string, string>;
 };
 
-const MyMarkdown: React.FC<Props> = ({ children, article }) => {
+const MyMarkdown: React.FC<Props> = ({ children, localImageURLs }) => {
   const navigate = useNavigate();
   const [referencedArticles, setReferencedArticles] = useState<
     Map<string, ArticleInfo>
   >(new Map<string, ArticleInfo>());
 
-  const CD = ComponentsDefault(referencedArticles, navigate);
+  const CD = ComponentsDefault(referencedArticles, navigate, localImageURLs);
 
   useEffect(() => {
-    if (article !== undefined) {
+    if (children !== undefined) {
       setReferencedArticles(new Map<string, ArticleInfo>());
-      extractArticleIDs(article.content).forEach((refedID) => {
+      extractArticleIDs(children).forEach((refedID) => {
         GetArticle(refedID).then((res) => {
           setReferencedArticles((prev) => {
             const newMap = new Map(prev);
@@ -35,7 +35,7 @@ const MyMarkdown: React.FC<Props> = ({ children, article }) => {
         });
       });
     }
-  }, [article]);
+  }, [children]);
 
   return (
     <ReactMarkdown

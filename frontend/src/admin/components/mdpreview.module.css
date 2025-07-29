@@ -3,4 +3,6 @@
   background: white;
   padding: 1vh 1vw;
   border: 1px solid black;
+  overflow-y: scroll;
+  resize: vertical;
 }

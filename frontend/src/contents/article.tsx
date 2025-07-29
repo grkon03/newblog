@@ -46,7 +46,7 @@ const Article: React.FC<Props> = ({ mainareaprops }) => {
         </div>
       </div>
       <div className={styles.articleContent}>
-        <MyMarkdown article={article}>{article.content}</MyMarkdown>
+        <MyMarkdown>{article.content}</MyMarkdown>
       </div>
     </div>
   );

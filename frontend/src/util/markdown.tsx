@@ -21,7 +21,8 @@ export const remarkPlugins = [gfm, remarkMath];
 export const rehypePlugins = [rehypeRaw, rehypeKatex];
 export const ComponentsDefault = (
   referencedArticles: Map<string, ArticleInfo>,
-  navigate: NavigateFunction
+  navigate: NavigateFunction,
+  localImageURLs?: Map<string, string>
 ): Components => {
   return {
     p: _p(referencedArticles),
@@ -30,7 +31,7 @@ export const ComponentsDefault = (
     h3: _h3,
     h4: _h4,
     h5: _h5,
-    img: _img,
+    img: _img(localImageURLs),
     a: _a(navigate),
     code: _code,
   };
@@ -111,14 +112,27 @@ const _h5: Components['h5'] = ({ children, ...props }) => (
   </strong>
 );
 
-const _img: Components['img'] = ({ src, alt, ...props }) => {
-  const isFromAPI = src !== undefined && src.startsWith('/');
-  if (!isFromAPI) {
-    return <img src={src} alt={alt} {...props} />;
-  } else {
-    return <img src={API.EndpointURL(src)} alt={alt} {...props} />;
-  }
-};
+const _img: (localImageURLs?: Map<string, string>) => Components['img'] =
+  (localImageURLs) =>
+  ({ src, alt, ...props }) => {
+    if (src === undefined) return <img alt={alt} {...props} />;
+
+    // for local images
+    if (localImageURLs !== undefined) {
+      const localURL = localImageURLs.get(src);
+      if (localURL !== undefined) {
+        return <img src={localURL} alt={alt} {...props} />;
+      }
+    }
+
+    // for public images
+    const isFromAPI = src.startsWith('/');
+    if (!isFromAPI) {
+      return <img src={src} alt={alt} {...props} />;
+    } else {
+      return <img src={API.EndpointURL(src)} alt={alt} {...props} />;
+    }
+  };
 
 const _a: (navigate: NavigateFunction) => Components['a'] =
   (navigate) =>

@@ -231,7 +231,7 @@ export function InsertImages(
         message.push(`${key}に変更されています。`);
       }
       newImages.set(key, file);
-      return `![](upload/${key})`;
+      return `![](${key})`;
     })
     .join('\n');
 
