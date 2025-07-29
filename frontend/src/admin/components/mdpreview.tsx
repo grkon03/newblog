@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
 import MyMarkdown from '../../base-component/mymarkdown';
 import styles from './mdpreview.module.css';
 

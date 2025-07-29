@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import styles from './article.module.css';
 import { ArticleInfo, GetArticle } from '../api/article';
 import { ConvertDateToJST } from '../util/date';
@@ -14,7 +14,6 @@ type Props = {
 const Article: React.FC<Props> = ({ mainareaprops }) => {
   InitSideArea(mainareaprops);
 
-  const navigate = useNavigate();
   const { id } = useParams();
   const [article, setArticle] = useState<ArticleInfo>();
 
