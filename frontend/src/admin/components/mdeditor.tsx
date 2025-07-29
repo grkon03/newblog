@@ -5,7 +5,6 @@ import React, {
   useLayoutEffect,
   DragEvent,
 } from 'react';
-import { IsImage } from '../../util/image';
 import MDELogic, { TextAreaState } from './mdelogic';
 import styles from './mdeditor.module.css';
 
