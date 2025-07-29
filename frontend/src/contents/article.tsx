@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 import styles from './article.module.css';
 import { ArticleInfo, GetArticle } from '../api/article';
 import { ConvertDateToJST } from '../util/date';
 import { GetImageSrc } from '../api/image';
 import { MainAreaProps, InitSideArea } from '../types';
-import {
-  extractArticleIDs,
-  CleanMarkdown,
-  rehypePlugins,
-  remarkPlugins,
-  ComponentsDefault,
-} from '../util/markdown';
+import MyMarkdown from '../base-component/mymarkdown';
 
 type Props = {
   mainareaprops?: MainAreaProps;
@@ -24,10 +17,6 @@ const Article: React.FC<Props> = ({ mainareaprops }) => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [article, setArticle] = useState<ArticleInfo>();
-  const [referencedArticles, setReferencedArticles] = useState<
-    Map<string, ArticleInfo>
-  >(new Map<string, ArticleInfo>());
-  const CD = ComponentsDefault(navigate, referencedArticles);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -36,21 +25,6 @@ const Article: React.FC<Props> = ({ mainareaprops }) => {
         .catch((err) => console.error(err));
     }
   }, [id]);
-
-  useEffect(() => {
-    if (article !== undefined) {
-      setReferencedArticles(new Map<string, ArticleInfo>());
-      extractArticleIDs(article.content).forEach((refedID) => {
-        GetArticle(refedID).then((res) => {
-          setReferencedArticles((prev) => {
-            const newMap = new Map(prev);
-            newMap.set(refedID, res);
-            return newMap;
-          });
-        });
-      });
-    }
-  }, [article]);
 
   if (!article) {
     return <div>Loading content</div>;
@@ -73,13 +47,7 @@ const Article: React.FC<Props> = ({ mainareaprops }) => {
         </div>
       </div>
       <div className={styles.articleContent}>
-        <ReactMarkdown
-          components={CD}
-          rehypePlugins={rehypePlugins}
-          remarkPlugins={remarkPlugins}
-        >
-          {CleanMarkdown(article.content)}
-        </ReactMarkdown>
+        <MyMarkdown article={article}>{article.content}</MyMarkdown>
       </div>
     </div>
   );
