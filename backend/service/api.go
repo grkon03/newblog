@@ -17,7 +17,7 @@ type API struct {
 func NewAPI(db *gorm.DB, config config.APIConfig) API {
 	return API{
 		PingAPI:    PingAPI{&database.DBPingHandler{DB: db}},
-		ArticleAPI: ArticleAPI{&database.ArticleHandler{DB: db}},
+		ArticleAPI: ArticleAPI{&database.ArticleHandler{DB: db}, &database.ImageHandler{DB: db}},
 		ImageAPI:   ImageAPI{&database.ImageHandler{DB: db}},
 		UserAPI:    NewUserAPI(&database.UserHandler{DB: db}, config.JWTKey),
 		JWT:        NewJWT(config.JWTKey),

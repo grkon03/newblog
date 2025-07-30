@@ -63,29 +63,29 @@ func DetectImageExt(r io.Reader) (string, error) {
 	}
 }
 
-func UploadImage(image *multipart.FileHeader, it ImageType) (int, string, error) {
+func StoreImage(image *multipart.FileHeader, it ImageType) (string, error) {
 	src, err := image.Open()
 	if err != nil {
-		return http.StatusUnsupportedMediaType, "", errors.New("cannot read the image file")
+		return "", errors.New("cannot read the image file")
 	}
 	defer src.Close()
 
 	ext, err := DetectImageExt(src)
 	if err != nil {
-		return http.StatusInternalServerError, "", err
+		return "", err
 	}
 
 	path := NewImageRelativePath(it) + "." + ext
 
 	out, err := os.Create(GetImageDirectPath(path))
 	if err != nil {
-		return http.StatusInternalServerError, "", err
+		return "", err
 	}
 
 	_, err = io.Copy(out, src)
 	if err != nil {
-		return http.StatusInternalServerError, "", err
+		return "", err
 	}
 
-	return http.StatusOK, path, nil
+	return path, nil
 }

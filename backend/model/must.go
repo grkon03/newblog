@@ -12,9 +12,8 @@ func CreateMust(db *gorm.DB) {
 
 func createImages(db *gorm.DB) {
 	noimage := Image{
-		ID:       1,
-		Path:     "template/NoImage.png",
-		Keywords: "no image",
+		ID:   1,
+		Path: "template/NoImage.png",
 	}
 
 	res := db.Save(&noimage)

@@ -14,11 +14,12 @@ func NewArticleHandler(db *gorm.DB) *ArticleHandler {
 	return &ArticleHandler{db}
 }
 
-func (h *ArticleHandler) CreateArticle(title, content, description string, writerID, thumbnailID uint) error {
+func (h *ArticleHandler) CreateArticle(title, content, description string, isPublished bool, writerID, thumbnailID uint) error {
 	return h.DB.Create(&model.Article{
 		Title:       title,
 		Content:     content,
 		Description: description,
+		IsPublished: isPublished,
 		WriterID:    writerID,
 		ThumbnailID: thumbnailID}).Error
 }
