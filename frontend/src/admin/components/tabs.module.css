@@ -1,0 +1,28 @@
+.tabswitch {
+  display: flex;
+}
+
+.switchbutton {
+  display: inline-block;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  background: #f3f3f3;
+  border: 1px solid #335;
+  border-bottom: 0;
+  padding: 10px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.switchbutton.selected {
+  background: #aae0ff;
+  color: #113;
+}
+
+.editor.s__preview {
+  display: none;
+}
+
+.preview.s__editor {
+  display: none;
+}
