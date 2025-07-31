@@ -3,6 +3,7 @@ import Tabs from './components/tabs';
 import SubmitButtons from './components/submitbuttons';
 import { MainAreaProps, InitSideArea } from '../types';
 import { AdminSA } from '../base-component/sidearea/admin';
+import styles from './createarticle.module.css';
 
 type Props = {
   mainareaprops?: MainAreaProps;
@@ -20,6 +21,7 @@ const CreateArticle: React.FC<Props> = ({ mainareaprops }) => {
 
   return (
     <div>
+      <div className={styles.titleinput}></div>
       <Tabs setMDtext={setMDtext} setUploadedImages={setUploadedImages} />
       <SubmitButtons
         onSaveClick={handleSaveClick}

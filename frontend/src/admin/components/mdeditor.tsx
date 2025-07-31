@@ -31,6 +31,10 @@ const MDEditor: React.FC<Props> = ({ setText, setImages }) => {
     new Map<string, File>()
   );
   const [message, setMessage] = useState<string>('');
+  const [composing, setComposition] = useState(false);
+  const startComposition = () => setComposition(true);
+  const endComposition = () => setComposition(false);
+
   const refTextArea = useRef<HTMLTextAreaElement>(null);
 
   const setTextAreaState: React.Dispatch<
@@ -126,6 +130,7 @@ const MDEditor: React.FC<Props> = ({ setText, setImages }) => {
     } else {
       switch (e.key) {
         case 'Tab':
+          if (composing) return;
           e.preventDefault();
           if (e.shiftKey) {
             setTextAreaState(
@@ -148,6 +153,7 @@ const MDEditor: React.FC<Props> = ({ setText, setImages }) => {
           }
           break;
         case 'Enter':
+          if (composing) return;
           e.preventDefault();
           setTextAreaState(
             MDELogic.LineBreakWithTab(
@@ -175,6 +181,8 @@ const MDEditor: React.FC<Props> = ({ setText, setImages }) => {
             MDELogic.updateText(textareaState, e.target.value)
           )
         }
+        onCompositionStart={startComposition}
+        onCompositionEnd={endComposition}
       ></textarea>
       <div>{message}</div>
     </div>
