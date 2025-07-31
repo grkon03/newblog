@@ -45,7 +45,6 @@ const SubmitButtons: React.FC<Props> = ({ onSaveClick, onPublishClick }) => {
           </div>
         </div>
       </Modal>
-      ;
     </div>
   );
 };

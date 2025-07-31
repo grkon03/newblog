@@ -5,3 +5,13 @@ export type User = {
   username: string;
   passhash: string;
 };
+
+export function NewUserTemplate(): User {
+  return {
+    id: 0,
+    created_at: '',
+    updated_at: '',
+    username: '',
+    passhash: '',
+  };
+}

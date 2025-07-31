@@ -5,6 +5,9 @@ export type LoginRequest = {
   password: string;
 };
 
+export const ContentTypeJSON = 'application/json';
+export const ContentTypeForm = 'multipart/form-data';
+
 class APIHandler {
   APIURL: string;
 
@@ -16,11 +19,15 @@ class APIHandler {
     return APIURL + endpoint;
   }
 
-  MakeRequest<BodyType>(method: string, body?: BodyType): RequestInit {
+  MakeRequest<BodyType>(
+    method: string,
+    body?: BodyType,
+    contentType?: string
+  ): RequestInit {
     var headers = new Headers();
     var token = localStorage.getItem('token');
     headers.append('Authorization', `Bearer ${token}`);
-    headers.append('Content-Type', 'application/json');
+    headers.append('Content-Type', contentType ?? ContentTypeJSON);
 
     var req: RequestInit = {
       method: method,
@@ -43,10 +50,14 @@ class APIHandler {
     return await res.json();
   }
 
-  async POST<ResultType>(endpoint: string, request: any): Promise<ResultType> {
+  async POST<ResultType>(
+    endpoint: string,
+    request: any,
+    contentType?: string
+  ): Promise<ResultType> {
     const res = await fetch(
       this.EndpointURL(endpoint),
-      this.MakeRequest('POST', request)
+      this.MakeRequest('POST', request, contentType)
     );
     return await res.json();
   }

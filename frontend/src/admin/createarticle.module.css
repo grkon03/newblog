@@ -1,0 +1,26 @@
+.createarticle {
+  background: white;
+  padding: 10px;
+}
+
+.thumbnailinput img {
+  display: block;
+}
+
+.titleinput {
+  input {
+    width: calc(100% - 10px);
+    height: 30px;
+    font-size: 20px;
+  }
+}
+
+.description {
+  textarea {
+    width: calc(100% - 10px);
+    height: 50px;
+    font-size: 20px;
+    resize: vertical;
+    overflow-y: scroll;
+  }
+}
