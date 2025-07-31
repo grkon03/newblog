@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MDEditor from './components/mdeditor';
 import MDPreview from './components/mdpreview';
+import SubmitButtons from './components/submitbuttons';
 import { MainAreaProps, InitSideArea } from '../types';
 import { AdminSA } from '../base-component/sidearea/admin';
 import styles from './createarticle.module.css';
@@ -22,6 +23,9 @@ const CreateArticle: React.FC<Props> = ({ mainareaprops }) => {
     setSelectedTab(s);
   };
   const isSelected = (s: SelectedTab) => s === selectedTab;
+
+  const handleSaveClick = () => {};
+  const handlePublishClick = () => {};
 
   return (
     <div>
@@ -52,6 +56,10 @@ const CreateArticle: React.FC<Props> = ({ mainareaprops }) => {
           <MDPreview MDtext={MDtext} images={uploadedImages} />
         </div>
       </div>
+      <SubmitButtons
+        onSaveClick={handleSaveClick}
+        onPublishClick={handlePublishClick}
+      />
     </div>
   );
 };

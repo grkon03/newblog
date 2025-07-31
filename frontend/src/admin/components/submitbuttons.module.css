@@ -1,0 +1,87 @@
+.submitwrapper {
+  text-align: right;
+  margin: 3vh 0;
+}
+
+.buttondefault {
+  display: inline-block;
+  padding: 10px;
+  border: 5px solid #3ae;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  user-select: none;
+
+  @media (hover: hover) {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.save {
+  margin-left: 10px;
+  background: white;
+  color: #18c;
+
+  &:active {
+    background: #eee;
+  }
+}
+
+.publish {
+  margin-left: 10px;
+  background: #3ae;
+  color: white;
+
+  &:active {
+    background: #18c;
+    border-color: #18c;
+  }
+}
+
+.popup {
+  text-align: center;
+  color: #345;
+  background-color: #eef;
+  padding: 20px;
+  border-radius: 10px;
+  width: 50vw;
+  margin: auto;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+
+  .buttondefault {
+    margin: 0 10px;
+  }
+}
+
+.popupmessage {
+  font-size: 20px;
+  margin: 10px;
+}
+
+.popupcancel {
+  margin-left: 10px;
+  background: white;
+  color: #18c;
+
+  &:active {
+    background: #eee;
+  }
+}
+
+.popupok {
+  margin-left: 10px;
+  background: #3ae;
+  color: white;
+
+  &:active {
+    background: #18c;
+    border-color: #18c;
+  }
+}
