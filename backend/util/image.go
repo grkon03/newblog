@@ -43,9 +43,14 @@ func NewImageRelativePath(it ImageType) string {
 }
 
 // detect the extension
-func DetectImageExt(r io.Reader) (string, error) {
+func DetectImageExt(r io.ReadSeeker) (string, error) {
 	buf := make([]byte, 512)
 	_, err := io.ReadAtLeast(r, buf, 512)
+	if err != nil {
+		return "", err
+	}
+
+	_, err = r.Seek(0, io.SeekStart)
 	if err != nil {
 		return "", err
 	}
@@ -59,7 +64,7 @@ func DetectImageExt(r io.Reader) (string, error) {
 	case "image/gif":
 		return "gif", nil
 	default:
-		return "", errors.New("the format " + ty + "is not supported as images")
+		return "", errors.New("the format " + ty + " is not supported as images")
 	}
 }
 

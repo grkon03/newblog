@@ -1,10 +1,10 @@
 package database
 
 import (
+	"fmt"
 	"log"
 	"mime/multipart"
 	"regexp"
-	"strconv"
 
 	"github.com/grkon03/newblog/backend/model"
 	"github.com/grkon03/newblog/backend/util"
@@ -17,6 +17,7 @@ type ImageHandler struct {
 
 func (h *ImageHandler) GetImage(id uint) (*model.Image, error) {
 	var im model.Image
+	im.ID = id
 	res := h.DB.First(&im)
 	if res.Error != nil {
 		return nil, res.Error
@@ -45,7 +46,8 @@ func (h *ImageHandler) CreateImage(image *multipart.FileHeader, it util.ImageTyp
 func (h *ImageHandler) UploadImagesInArticle(content string, images []*multipart.FileHeader) (string, error) {
 	nameidMap := map[string]uint{}
 
-	rexp, err := regexp.Compile(`!\[.*\]\((local/.*)\)`)
+	// matches ![alt](src)
+	rexp, err := regexp.Compile(`!\[([^\[\]\(\)]*)\]\(([^\[\]\(\)]*)\)`)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -59,13 +61,13 @@ func (h *ImageHandler) UploadImagesInArticle(content string, images []*multipart
 		nameidMap[imgsrc.Filename] = imgdb.ID
 	}
 
-	updated := rexp.ReplaceAllFunc([]byte(content), func(match []byte) []byte {
-		name := string([]rune(string(match[1]))[6:])
+	updated := util.ReplaceAllSubmatchFunc(content, rexp, func(match []string) string {
+		name := string(match[2])
 		id, ok := nameidMap[name]
 		if !ok {
 			id = 1 // no image
 		}
-		return []byte("/image/" + strconv.Itoa(int(id)))
+		return fmt.Sprintf("![%s](/image/%d)", match[1], id)
 	})
 
 	return string(updated), nil

@@ -93,8 +93,11 @@ func (a *ArticleAPI) PostArticle(c echo.Context) error {
 
 	var request PostArticleRequest
 
+	err = c.Request().ParseMultipartForm(1 << 24)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "bad request")
+	}
 	form, err := c.MultipartForm()
-
 	if err != nil {
 		return c.String(http.StatusBadRequest, "bad request")
 	}

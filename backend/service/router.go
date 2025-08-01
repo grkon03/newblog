@@ -32,7 +32,7 @@ func Routing(e *echo.Echo, api API) error {
 		admin := a.Group("/auth")
 		admin.Use(userauth)
 		{
-			admin.POST("/ping", api.PingAPI.Ping)
+			admin.GET("/ping", api.PingAPI.Ping)
 			admin.POST("/article", api.ArticleAPI.PostArticle)
 		}
 	}
