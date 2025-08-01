@@ -18,8 +18,8 @@ export type ArticleInfo = {
 export function NewArticleInfoTemplate(): ArticleInfo {
   return {
     id: 0,
-    created_at: '',
-    updated_at: '',
+    created_at: '2006-01-02T15:04:05+09:00',
+    updated_at: '2006-01-02T15:04:05+09:00',
     title: '',
     content: '',
     description: '',
@@ -58,6 +58,6 @@ export async function PostArticle(
   const request = new FormData();
   request.append('article', JSON.stringify(article));
   request.append('thumbnail', thumbnail);
-  images.forEach((image) => request.append('files', image));
+  images.forEach((image) => request.append('images', image));
   return API.POST('/auth/article', request, ContentTypeForm);
 }

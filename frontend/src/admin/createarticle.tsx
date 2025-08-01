@@ -46,7 +46,7 @@ const CreateArticle: React.FC<Props> = ({ mainareaprops }) => {
       <h2>記事を作成する</h2>
       <div className={styles.thumbnailinput}>
         <h3>サムネイル</h3>
-        {thumbnail !== undefined && (
+        {thumbnailURL !== '' && (
           <img src={thumbnailURL} alt="画像読み込みエラー" />
         )}
         <input

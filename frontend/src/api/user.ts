@@ -9,8 +9,8 @@ export type User = {
 export function NewUserTemplate(): User {
   return {
     id: 0,
-    created_at: '',
-    updated_at: '',
+    created_at: '2006-01-02T15:04:05+09:00',
+    updated_at: '2006-01-02T15:04:05+09:00',
     username: '',
     passhash: '',
   };

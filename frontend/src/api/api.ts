@@ -19,15 +19,18 @@ class APIHandler {
     return APIURL + endpoint;
   }
 
-  MakeRequest<BodyType>(
-    method: string,
-    body?: BodyType,
-    contentType?: string
-  ): RequestInit {
+  HeadersDefault(): Headers {
     var headers = new Headers();
-    var token = localStorage.getItem('token');
+    var token = localStorage.getItem('token') ?? '';
     headers.append('Authorization', `Bearer ${token}`);
-    headers.append('Content-Type', contentType ?? ContentTypeJSON);
+
+    return headers;
+  }
+
+  MakeRequest(method: string, body?: any, contentType?: string): RequestInit {
+    var headers = this.HeadersDefault();
+    if (contentType !== ContentTypeForm)
+      headers.append('Content-Type', contentType ?? ContentTypeJSON);
 
     var req: RequestInit = {
       method: method,
@@ -35,7 +38,14 @@ class APIHandler {
     };
 
     if (body !== undefined) {
-      req.body = JSON.stringify(body);
+      switch (contentType) {
+        case ContentTypeJSON:
+          req.body = JSON.stringify(body);
+          break;
+        case ContentTypeForm:
+          req.body = body;
+          break;
+      }
     }
 
     return req;
