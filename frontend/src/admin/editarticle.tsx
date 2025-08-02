@@ -19,7 +19,7 @@ const EditArticle: React.FC<Props> = ({ mainareaprops }) => {
 
   const [isFetched, setIsFetched] = useState(false);
 
-  const [ID, setID] = useState<string | undefined>(location.state?.id);
+  const [ID] = useState<string | undefined>(location.state?.id);
   const [title, setTitle] = useState('');
   const [thumbnail, setThumbnail] = useState<File>();
   const [thumbnailURL, setThumbnailURL] = useState('');
