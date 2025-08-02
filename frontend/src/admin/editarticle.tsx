@@ -4,13 +4,13 @@ import SubmitButtons from './components/submitbuttons';
 import { MainAreaProps, InitSideArea } from '../types';
 import { AdminSA } from '../base-component/sidearea/admin';
 import { PostArticle } from '../api/article';
-import styles from './createarticle.module.css';
+import styles from './editarticle.module.css';
 
 type Props = {
   mainareaprops?: MainAreaProps;
 };
 
-const CreateArticle: React.FC<Props> = ({ mainareaprops }) => {
+const EditArticle: React.FC<Props> = ({ mainareaprops }) => {
   InitSideArea(mainareaprops, AdminSA);
   const [title, setTitle] = useState('');
   const [thumbnail, setThumbnail] = useState<File>();
@@ -86,4 +86,4 @@ const CreateArticle: React.FC<Props> = ({ mainareaprops }) => {
   );
 };
 
-export default CreateArticle;
+export default EditArticle;
