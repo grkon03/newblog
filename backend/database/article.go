@@ -31,9 +31,25 @@ func (h *ArticleHandler) GetArticle(id uint) (*model.Article, error) {
 	return &article, err
 }
 
-func (h *ArticleHandler) GetArticles(from, count uint) ([]model.Article, error) {
+func (h *ArticleHandler) GetArticles(from, count uint, excludeUnpublished bool) ([]model.Article, error) {
 	var articles []model.Article
-	err := h.DB.Order("created_at desc").Offset(int(from)).Limit(int(count)).
-		Preload(clause.Associations).Find(&articles).Error
+	where := make(map[string]any)
+	if excludeUnpublished {
+		where["is_published"] = true
+	}
+	err := h.DB.Order("created_at desc").Where(where).Offset(int(from)).Limit(int(count)).Preload(clause.Associations).Find(&articles).Error
+	return articles, err
+}
+
+func (h *ArticleHandler) GetWritersArticles(writerID uint, excludeUnpublished bool, from, count uint) ([]model.Article, error) {
+	var articles []model.Article
+	where := make(map[string]any)
+
+	where["writer_id"] = writerID
+	if excludeUnpublished {
+		where["is_published"] = true
+	}
+
+	err := h.DB.Order("created_at desc").Where(where).Offset(int(from)).Limit(int(count)).Preload(clause.Associations).Find(&articles).Error
 	return articles, err
 }

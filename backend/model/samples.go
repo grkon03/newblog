@@ -29,6 +29,7 @@ func createUserSamples(db *gorm.DB) {
 
 func createArticleSamples(db *gorm.DB) {
 	content, err := os.ReadFile(samplesDir + "/article1.md")
+
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -40,6 +41,7 @@ func createArticleSamples(db *gorm.DB) {
 		Description: `
 			1つ目の記事です。
 		`,
+		IsPublished: true,
 		WriterID:    1,
 		ThumbnailID: 1,
 	}
@@ -57,6 +59,25 @@ func createArticleSamples(db *gorm.DB) {
 		Description: `
 			2つ目の記事です。いぇいいぇい。
 		`,
+		IsPublished: true,
+		WriterID:    1,
+		ThumbnailID: 1,
+	}
+
+	content, err = os.ReadFile(samplesDir + "/article3.md")
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	var article3 = Article{
+		ID:      3,
+		Title:   "サンプル記事3",
+		Content: string(content),
+		Description: `
+			3つ目の記事です。編集中。
+		`,
+		IsPublished: false,
 		WriterID:    1,
 		ThumbnailID: 1,
 	}
@@ -66,6 +87,10 @@ func createArticleSamples(db *gorm.DB) {
 		log.Fatal(res.Error)
 	}
 	res = db.Save(&article2)
+	if res.Error != nil {
+		log.Fatal(res.Error)
+	}
+	res = db.Save(&article3)
 	if res.Error != nil {
 		log.Fatal(res.Error)
 	}

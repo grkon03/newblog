@@ -61,3 +61,12 @@ export async function PostArticle(
   images.forEach((image) => request.append('images', image));
   return API.POST('/auth/article', request, ContentTypeForm);
 }
+
+export async function GetMyArticles(
+  from: number,
+  count: number
+): Promise<ArticleInfo[]> {
+  return API.GET<ArticleInfo[]>(
+    '/auth/myarticles?from=' + from.toString() + '&count=' + count.toString()
+  );
+}

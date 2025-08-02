@@ -4,6 +4,7 @@ import Home from './contents/home';
 import Article from './contents/article';
 import Login from './admin/login';
 import EditArticle from './admin/editarticle';
+import Dashboard from './admin/dashboard';
 
 type RouteParam = {
   path: string;
@@ -44,6 +45,14 @@ export const MyRoutes: RouteParam[] = [
     elem: (
       <Template>
         <EditArticle />
+      </Template>
+    ),
+  },
+  {
+    path: '/admin/dashboard',
+    elem: (
+      <Template>
+        <Dashboard />
       </Template>
     ),
   },

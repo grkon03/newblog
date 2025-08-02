@@ -67,9 +67,8 @@ func (a *ArticleAPI) GetArticles(c echo.Context) error {
 		count = uint(count64)
 	}
 
-	articles, err := a.h.GetArticles(from, count)
+	articles, err := a.h.GetArticles(from, count, true)
 	if err != nil {
-		log.Println(err.Error())
 		c.String(http.StatusInternalServerError, err.Error())
 		return err
 	}
@@ -140,4 +139,45 @@ func (a *ArticleAPI) PostArticle(c echo.Context) error {
 	}
 
 	return c.String(http.StatusOK, "success")
+}
+
+// ?from=xxx&count=xxx
+func (a *ArticleAPI) GetMyArticles(c echo.Context) error {
+	claims, err := GetJWTUserClaims(c)
+	if err != nil {
+		return c.String(http.StatusUnauthorized, "please login")
+	}
+	writerID := claims.UserID
+
+	var from, count uint = 0, 0
+
+	param := c.QueryParam("from")
+	if param != "" {
+		from64, err := strconv.ParseInt(param, 10, 64)
+		if err != nil {
+			log.Println(err)
+			c.String(http.StatusBadRequest, "Bad request")
+			return err
+		}
+		from = uint(from64)
+	}
+
+	param = c.QueryParam("count")
+	if param != "" {
+		count64, err := strconv.ParseInt(param, 10, 64)
+		if err != nil {
+			log.Println(err)
+			c.String(http.StatusBadRequest, "Bad request")
+			return err
+		}
+		count = uint(count64)
+	}
+
+	articles, err := a.h.GetWritersArticles(writerID, false, from, count)
+
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, articles)
 }
