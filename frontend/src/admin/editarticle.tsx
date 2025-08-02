@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import Tabs from './components/tabs';
 import SubmitButtons from './components/submitbuttons';
 import { MainAreaProps, InitSideArea } from '../types';
 import { AdminSA } from '../base-component/sidearea/admin';
-import { PostArticle } from '../api/article';
+import { GetImageSrc } from '../api/image';
+import { GetArticle, PostArticle } from '../api/article';
 import styles from './editarticle.module.css';
 
 type Props = {
@@ -12,6 +14,12 @@ type Props = {
 
 const EditArticle: React.FC<Props> = ({ mainareaprops }) => {
   InitSideArea(mainareaprops, AdminSA);
+
+  const location = useLocation();
+
+  const [isFetched, setIsFetched] = useState(false);
+
+  const [ID, setID] = useState<string | undefined>(location.state?.id);
   const [title, setTitle] = useState('');
   const [thumbnail, setThumbnail] = useState<File>();
   const [thumbnailURL, setThumbnailURL] = useState('');
@@ -20,6 +28,19 @@ const EditArticle: React.FC<Props> = ({ mainareaprops }) => {
   const [uploadedImages, setUploadedImages] = useState<Map<string, File>>(
     new Map<string, File>()
   );
+
+  useEffect(() => {
+    if (isFetched) return;
+    if (ID === undefined) return;
+
+    setIsFetched(true);
+    GetArticle(ID).then((article) => {
+      setTitle(article.title);
+      setThumbnailURL(GetImageSrc(article.thumbnail_id));
+      setDescription(article.description);
+      setMDtext(article.content);
+    });
+  }, [ID, isFetched]);
 
   useEffect(() => {
     if (thumbnail === undefined) return;
@@ -76,7 +97,11 @@ const EditArticle: React.FC<Props> = ({ mainareaprops }) => {
       </div>
       <div className={styles.content}>
         <h3>記事本文</h3>
-        <Tabs setMDtext={setMDtext} setUploadedImages={setUploadedImages} />
+        <Tabs
+          initialText={MDtext}
+          setMDtext={setMDtext}
+          setUploadedImages={setUploadedImages}
+        />
       </div>
       <SubmitButtons
         onSaveClick={handleSaveClick}

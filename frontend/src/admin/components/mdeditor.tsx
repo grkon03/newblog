@@ -15,11 +15,12 @@ type MDESettings = {
 };
 
 type Props = {
+  initialText?: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
   setImages: React.Dispatch<React.SetStateAction<Map<string, File>>>;
 };
 
-const MDEditor: React.FC<Props> = ({ setText, setImages }) => {
+const MDEditor: React.FC<Props> = ({ initialText, setText, setImages }) => {
   const refMDESettings = useRef<MDESettings>({
     TabSpaces: 2,
   });
@@ -30,7 +31,7 @@ const MDEditor: React.FC<Props> = ({ setText, setImages }) => {
   const [uploadedImages, setUploadedImages] = useState<Map<string, File>>(
     new Map<string, File>()
   );
-  const [message, setMessage] = useState<string>('');
+  const [message, setMessage] = useState<string>(initialText ?? '');
   const [composing, setComposition] = useState(false);
   const startComposition = () => setComposition(true);
   const endComposition = () => setComposition(false);

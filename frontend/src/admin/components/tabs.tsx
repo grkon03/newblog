@@ -6,12 +6,17 @@ import styles from './tabs.module.css';
 type SelectedTab = 'editor' | 'preview';
 
 type Props = {
+  initialText?: string;
   setMDtext: (text: string) => void;
   setUploadedImages: (images: Map<string, File>) => void;
 };
 
-const Tabs: React.FC<Props> = ({ setMDtext, setUploadedImages }) => {
-  const [MDtext, _setMDtext] = useState('');
+const Tabs: React.FC<Props> = ({
+  initialText,
+  setMDtext,
+  setUploadedImages,
+}) => {
+  const [MDtext, _setMDtext] = useState(initialText ?? '');
   const [uploadedImages, _setUploadedImages] = useState<Map<string, File>>(
     new Map<string, File>()
   );
