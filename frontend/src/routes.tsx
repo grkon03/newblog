@@ -2,7 +2,7 @@ import React from 'react';
 import Template from './template';
 import Home from './contents/home';
 import Article from './contents/article';
-import Login from './admin/login';
+import LoginPage from './admin/login';
 import EditArticle from './admin/editarticle';
 import Dashboard from './admin/dashboard';
 
@@ -36,14 +36,14 @@ export const MyRoutes: RouteParam[] = [
     path: '/admin/login',
     elem: (
       <Template>
-        <Login />
+        <LoginPage />
       </Template>
     ),
   },
   {
     path: '/admin/editarticle',
     elem: (
-      <Template>
+      <Template shouldLogin>
         <EditArticle />
       </Template>
     ),
@@ -51,7 +51,7 @@ export const MyRoutes: RouteParam[] = [
   {
     path: '/admin/dashboard',
     elem: (
-      <Template>
+      <Template shouldLogin>
         <Dashboard />
       </Template>
     ),

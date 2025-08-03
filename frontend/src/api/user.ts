@@ -1,3 +1,5 @@
+import { API } from './api';
+
 export type User = {
   id: number;
   created_at: string;
@@ -14,4 +16,32 @@ export function NewUserTemplate(): User {
     username: '',
     passhash: '',
   };
+}
+
+export type LoginRequest = {
+  username: string;
+  password: string;
+};
+
+export async function Login(req: LoginRequest): Promise<boolean> {
+  type LoginResponse = {
+    token: string;
+    user: User;
+  };
+
+  const [res, status] = await API.POST<LoginResponse>('/login', req);
+
+  if (API.IsOK(status)) {
+    localStorage.setItem('token', res.token);
+    localStorage.setItem('user', JSON.stringify(res.user));
+  }
+
+  return API.IsOK(status);
+}
+
+export function LoginUser(): User | null {
+  var dt = localStorage.getItem('user');
+  if (dt === null) return null;
+  const user: User = JSON.parse(dt);
+  return user;
 }

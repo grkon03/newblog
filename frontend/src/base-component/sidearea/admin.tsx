@@ -5,15 +5,24 @@ import styles from './admin.module.css';
 
 const Menu: React.FC = () => {
   const navigate = useNavigate();
+  const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/');
+  };
+
   return (
     <div className={`${sastyles.sa_item} ${styles.menu}`}>
       <div className={sastyles.sai_title}>メニュー</div>
       <div className={sastyles.sai_content}>
         <div
           className={styles.menuitem}
-          onClick={() => navigate('/admin/createarticle')}
+          onClick={() => navigate('/admin/editarticle')}
         >
           記事を作成する
+        </div>
+        <div className={styles.menuitem} onClick={logout}>
+          ログアウト
         </div>
       </div>
     </div>

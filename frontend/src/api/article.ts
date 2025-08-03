@@ -31,16 +31,19 @@ export function NewArticleInfoTemplate(): ArticleInfo {
 }
 
 export async function GetArticle(id: string): Promise<ArticleInfo> {
-  return API.GET<ArticleInfo>('/article/' + id);
+  const [res] = await API.GET<ArticleInfo>('/article/' + id);
+  return res;
 }
 
 export async function GetArticles(
   from: number,
   count: number
 ): Promise<ArticleInfo[]> {
-  return API.GET<ArticleInfo[]>(
+  const [res] = await API.GET<ArticleInfo[]>(
     '/articles?from=' + from.toString() + '&count=' + count.toString()
   );
+
+  return res;
 }
 
 export async function PostArticle(
@@ -59,14 +62,22 @@ export async function PostArticle(
   request.append('article', JSON.stringify(article));
   request.append('thumbnail', thumbnail);
   images.forEach((image) => request.append('images', image));
-  return API.POST('/auth/article', request, ContentTypeForm);
+  const [res] = await API.POST<boolean>(
+    '/auth/article',
+    request,
+    ContentTypeForm
+  );
+
+  return res;
 }
 
 export async function GetMyArticles(
   from: number,
   count: number
 ): Promise<ArticleInfo[]> {
-  return API.GET<ArticleInfo[]>(
+  const [res] = await API.GET<ArticleInfo[]>(
     '/auth/myarticles?from=' + from.toString() + '&count=' + count.toString()
   );
+
+  return res;
 }

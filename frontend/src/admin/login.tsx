@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { API, LoginRequest } from '../api/api';
+import { useNavigate } from 'react-router-dom';
+import { Login, LoginRequest } from '../api/user';
 import styles from './login.module.css';
 import { MainAreaProps, InitSideArea } from '../types';
 
@@ -7,16 +8,16 @@ type Props = {
   mainareaprops?: MainAreaProps;
 };
 
-const Login: React.FC<Props> = ({ mainareaprops }) => {
+const LoginPage: React.FC<Props> = ({ mainareaprops }) => {
   InitSideArea(mainareaprops);
 
+  const navigate = useNavigate();
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [message, setMessage] = useState<string>('');
 
-  const AfterSuceeded = () => {
-    // 試しに ping を打ってみる
-    API.GET<string>('/auth/ping').then((res) => alert(res));
+  const AfterSucceeded = () => {
+    navigate('/admin/dashboard');
   };
 
   const AfterFailed = () => {
@@ -34,9 +35,9 @@ const Login: React.FC<Props> = ({ mainareaprops }) => {
       password: password,
     };
 
-    API.LOGIN(req).then((res) => {
-      if (res) {
-        AfterSuceeded();
+    Login(req).then((ok) => {
+      if (ok) {
+        AfterSucceeded();
       } else {
         AfterFailed();
       }
@@ -70,4 +71,4 @@ const Login: React.FC<Props> = ({ mainareaprops }) => {
   );
 };
 
-export default Login;
+export default LoginPage;

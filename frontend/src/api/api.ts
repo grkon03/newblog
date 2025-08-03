@@ -1,10 +1,5 @@
 const APIURL = 'http://localhost:3111/api';
 
-export type LoginRequest = {
-  username: string;
-  password: string;
-};
-
 export const ContentTypeJSON = 'application/json';
 export const ContentTypeForm = 'multipart/form-data';
 
@@ -29,8 +24,9 @@ class APIHandler {
 
   MakeRequest(method: string, body?: any, contentType?: string): RequestInit {
     var headers = this.HeadersDefault();
+    contentType = contentType ?? ContentTypeJSON;
     if (contentType !== ContentTypeForm)
-      headers.append('Content-Type', contentType ?? ContentTypeJSON);
+      headers.append('Content-Type', contentType);
 
     var req: RequestInit = {
       method: method,
@@ -51,38 +47,29 @@ class APIHandler {
     return req;
   }
 
-  async GET<ResultType>(endpoint: string): Promise<ResultType> {
+  async GET<ResultType>(endpoint: string): Promise<[ResultType, number]> {
     const res = await fetch(
       this.EndpointURL(endpoint),
       this.MakeRequest('GET')
     );
 
-    return await res.json();
+    return [await res.json(), res.status];
   }
 
   async POST<ResultType>(
     endpoint: string,
     request: any,
     contentType?: string
-  ): Promise<ResultType> {
+  ): Promise<[ResultType, number]> {
     const res = await fetch(
       this.EndpointURL(endpoint),
       this.MakeRequest('POST', request, contentType)
     );
-    return await res.json();
+    return [await res.json(), res.status];
   }
 
-  async LOGIN(req: LoginRequest): Promise<boolean> {
-    const res = await fetch(
-      this.EndpointURL('/login'),
-      this.MakeRequest('POST', req)
-    );
-
-    if (res.ok) {
-      localStorage.setItem('token', await res.text());
-    }
-
-    return res.ok;
+  IsOK(status: number) {
+    return 200 <= status && status < 300;
   }
 }
 

@@ -1,9 +1,11 @@
 package service
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/grkon03/newblog/backend/model"
 	"github.com/grkon03/newblog/backend/service/repository"
 	"github.com/grkon03/newblog/backend/util"
 	"github.com/labstack/echo"
@@ -23,9 +25,15 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
+type LoginResponse struct {
+	Token string     `json:"token"`
+	User  model.User `json:"user"`
+}
+
 func (a *UserAPI) Login(c echo.Context) error {
 	var req LoginRequest
 	if err := c.Bind(&req); err != nil {
+		log.Print(err.Error())
 		return c.String(http.StatusBadRequest, "Invalid request")
 	}
 
@@ -41,5 +49,9 @@ func (a *UserAPI) Login(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	return c.String(http.StatusOK, tokenstr)
+	var res LoginResponse
+	res.Token = tokenstr
+	res.User = *user
+
+	return c.JSON(http.StatusOK, res)
 }
