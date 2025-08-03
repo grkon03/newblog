@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import Tabs from './components/tabs';
-import SubmitButtons from './components/submitbuttons';
+import Tabs from './ea-components/tabs';
+import SubmitButtons from './ea-components/submitbuttons';
 import { MainAreaProps, InitSideArea } from '../types';
 import { AdminSA } from '../base-component/sidearea/admin';
 import { GetImageSrc } from '../api/image';
