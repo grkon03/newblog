@@ -181,3 +181,51 @@ func (a *ArticleAPI) GetMyArticles(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, articles)
 }
+
+func (a *ArticleAPI) PutArticle(c echo.Context) error {
+	claims, err := GetJWTUserClaims(c)
+	if err != nil {
+		return c.String(http.StatusUnauthorized, "Please login")
+	}
+	writerID := claims.UserID
+
+	var article model.Article
+
+	err = c.Bind(&article)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "bad request")
+	}
+
+	err = a.h.UpdateArticle(writerID, &article)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.NoContent(http.StatusOK)
+}
+
+func (a *ArticleAPI) DeleteArticle(c echo.Context) error {
+	type Request struct {
+		ID uint `json:"id"`
+	}
+
+	claims, err := GetJWTUserClaims(c)
+	if err != nil {
+		return c.String(http.StatusUnauthorized, "Please login")
+	}
+	writerID := claims.UserID
+
+	var req Request
+
+	err = c.Bind(req)
+	if err != nil {
+		return c.String(http.StatusBadRequest, "bad request")
+	}
+
+	err = a.h.DeleteArticle(writerID, req.ID)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.NoContent(http.StatusOK)
+}

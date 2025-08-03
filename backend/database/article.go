@@ -1,6 +1,8 @@
 package database
 
 import (
+	"errors"
+
 	"github.com/grkon03/newblog/backend/model"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
@@ -19,7 +21,7 @@ func (h *ArticleHandler) CreateArticle(title, content, description string, isPub
 		Title:       title,
 		Content:     content,
 		Description: description,
-		IsPublished: isPublished,
+		IsPublished: &isPublished,
 		WriterID:    writerID,
 		ThumbnailID: thumbnailID}).Error
 }
@@ -52,4 +54,22 @@ func (h *ArticleHandler) GetWritersArticles(writerID uint, excludeUnpublished bo
 
 	err := h.DB.Order("created_at desc").Where(where).Offset(int(from)).Limit(int(count)).Preload(clause.Associations).Find(&articles).Error
 	return articles, err
+}
+
+func (h *ArticleHandler) UpdateArticle(writerID uint, article *model.Article) error {
+	if article.ID == 0 {
+		return errors.New("ID cannot be 0")
+	}
+
+	// note: verifying the coincidence of WriterID
+	return h.DB.Where(model.Article{ID: article.ID, WriterID: writerID}).Updates(article).Error
+}
+
+func (h *ArticleHandler) DeleteArticle(writerID, articleID uint) error {
+	if articleID == 0 {
+		return errors.New("ID cannot be 0")
+	}
+
+	// note: verifying the coincidence of WriterID
+	return h.DB.Delete(&model.Article{ID: articleID, WriterID: writerID}).Error
 }

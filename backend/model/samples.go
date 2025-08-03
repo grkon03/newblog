@@ -34,6 +34,8 @@ func createArticleSamples(db *gorm.DB) {
 		log.Fatal(err.Error())
 	}
 
+	var t, f = true, false
+
 	var article1 = Article{
 		ID:      1,
 		Title:   "サンプル記事1",
@@ -41,7 +43,7 @@ func createArticleSamples(db *gorm.DB) {
 		Description: `
 			1つ目の記事です。
 		`,
-		IsPublished: true,
+		IsPublished: &t,
 		WriterID:    1,
 		ThumbnailID: 1,
 	}
@@ -59,7 +61,7 @@ func createArticleSamples(db *gorm.DB) {
 		Description: `
 			2つ目の記事です。いぇいいぇい。
 		`,
-		IsPublished: true,
+		IsPublished: &t,
 		WriterID:    1,
 		ThumbnailID: 1,
 	}
@@ -77,7 +79,7 @@ func createArticleSamples(db *gorm.DB) {
 		Description: `
 			3つ目の記事です。編集中。
 		`,
-		IsPublished: false,
+		IsPublished: &f,
 		WriterID:    1,
 		ThumbnailID: 1,
 	}

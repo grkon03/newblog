@@ -23,7 +23,7 @@ type Article struct {
 	Title       string    `json:"title"`
 	Content     string    `json:"content"`
 	Description string    `json:"description"`
-	IsPublished bool      `json:"is_published"`
+	IsPublished *bool     `json:"is_published"`
 	WriterID    uint      `json:"writer_id"`
 	Writer      User      `gorm:"foreignKey:WriterID" json:"writer"`
 	ThumbnailID uint      `json:"thumbnail_id"`

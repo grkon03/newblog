@@ -34,6 +34,8 @@ func Routing(e *echo.Echo, api API) error {
 		{
 			admin.GET("/ping", api.PingAPI.Ping)
 			admin.POST("/article", api.ArticleAPI.PostArticle)
+			admin.PUT("/article", api.ArticleAPI.PutArticle)
+			admin.DELETE("/article", api.ArticleAPI.DeleteArticle)
 			admin.GET("/myarticles", api.ArticleAPI.GetMyArticles)
 		}
 	}
