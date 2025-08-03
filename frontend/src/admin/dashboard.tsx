@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { MainAreaProps, InitSideArea } from '../types';
 import { AdminSA } from '../base-component/sidearea/admin';
-import ArticleCards from '../base-component/articlecards';
+import DBArticleCards from './db-components/dbarticlecards';
 import { ArticleInfo, GetMyArticles } from '../api/article';
 
 type Props = {
@@ -15,16 +15,17 @@ const Dashboard: React.FC<Props> = ({ mainareaprops }) => {
   const [articles, setArticles] = useState<ArticleInfo[]>([]);
   const [nextToLoad, setNextToLoad] = useState<number>(0);
 
-  const onClickMoreArticleCards = () => {
+  const handleClickPrevPage = () => {
+    setNextToLoad((prev) => prev - onestep);
+  };
+
+  const handleClickNextPage = () => {
     setNextToLoad((prev) => prev + onestep);
   };
 
   useEffect(() => {
     GetMyArticles(nextToLoad, onestep).then((res) => {
-      setArticles((prev) => [
-        ...prev,
-        ...res.filter((a) => !prev.some((b) => b.id === a.id)),
-      ]);
+      setArticles(res);
     });
   }, [nextToLoad]);
 
@@ -33,9 +34,10 @@ const Dashboard: React.FC<Props> = ({ mainareaprops }) => {
       <h2>ダッシュボード</h2>
       <div>
         <h3>記事を管理する</h3>
-        <ArticleCards articles={articles} />
+        <DBArticleCards articles={articles} />
         <div>
-          <div onClick={onClickMoreArticleCards}>次のページ</div>
+          <div onClick={handleClickPrevPage}>前の{onestep}件</div>
+          <div onClick={handleClickNextPage}>次の{onestep}件</div>
         </div>
       </div>
     </div>

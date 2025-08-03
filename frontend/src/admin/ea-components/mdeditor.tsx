@@ -31,7 +31,7 @@ const MDEditor: React.FC<Props> = ({ initialText, setText, setImages }) => {
   const [uploadedImages, setUploadedImages] = useState<Map<string, File>>(
     new Map<string, File>()
   );
-  const [message, setMessage] = useState<string>(initialText ?? '');
+  const [message, setMessage] = useState<string>('');
   const [composing, setComposition] = useState(false);
   const startComposition = () => setComposition(true);
   const endComposition = () => setComposition(false);
@@ -59,6 +59,11 @@ const MDEditor: React.FC<Props> = ({ initialText, setText, setImages }) => {
     _setTextAreaState(s);
   };
 
+  useEffect(() => {
+    if (initialText !== undefined) {
+      _setTextAreaState((prev) => MDELogic.updateText(prev, initialText));
+    }
+  }, [initialText]);
   useEffect(() => {
     setText(textareaState.text);
   }, [setText, textareaState.text]);

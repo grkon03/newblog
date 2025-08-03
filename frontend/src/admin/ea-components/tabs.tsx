@@ -16,7 +16,7 @@ const Tabs: React.FC<Props> = ({
   setMDtext,
   setUploadedImages,
 }) => {
-  const [MDtext, _setMDtext] = useState(initialText ?? '');
+  const [MDtext, _setMDtext] = useState('');
   const [uploadedImages, _setUploadedImages] = useState<Map<string, File>>(
     new Map<string, File>()
   );
@@ -55,7 +55,11 @@ const Tabs: React.FC<Props> = ({
       </div>
       <div>
         <div className={`${styles.editor} ${styles['s__' + selectedTab]}`}>
-          <MDEditor setText={_setMDtext} setImages={_setUploadedImages} />
+          <MDEditor
+            initialText={initialText ?? ''}
+            setText={_setMDtext}
+            setImages={_setUploadedImages}
+          />
         </div>
         <div className={`${styles.preview} ${styles['s__' + selectedTab]}`}>
           <MDPreview MDtext={MDtext} images={uploadedImages} />
