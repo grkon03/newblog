@@ -3,6 +3,7 @@ import { MainAreaProps, InitSideArea } from '../types';
 import { AdminSA } from '../base-component/sidearea/admin';
 import DBArticleCards from './db-components/dbarticlecards';
 import { ArticleInfo, GetMyArticles } from '../api/article';
+import styles from './dashboard.module.css';
 
 type Props = {
   mainareaprops?: MainAreaProps;
@@ -34,10 +35,17 @@ const Dashboard: React.FC<Props> = ({ mainareaprops }) => {
       <h2>ダッシュボード</h2>
       <div>
         <h3>記事を管理する</h3>
+        <div className={styles.loadpagemessage}>
+          {nextToLoad}件目から{nextToLoad + onestep - 1}件目を表示中
+        </div>
         <DBArticleCards articles={articles} />
-        <div>
-          <div onClick={handleClickPrevPage}>前の{onestep}件</div>
-          <div onClick={handleClickNextPage}>次の{onestep}件</div>
+        <div className={styles.loadpagebuttonWrapper}>
+          <div onClick={handleClickPrevPage} className={styles.loadpagebutton}>
+            前の{onestep}件
+          </div>
+          <div onClick={handleClickNextPage} className={styles.loadpagebutton}>
+            次の{onestep}件
+          </div>
         </div>
       </div>
     </div>
