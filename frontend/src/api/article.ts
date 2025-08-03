@@ -46,29 +46,28 @@ export async function GetArticles(
   return res;
 }
 
-export async function PostArticle(
-  title: string,
-  content: string,
-  description: string,
-  thumbnail: File,
-  images: File[]
-): Promise<boolean> {
-  const article: ArticleInfo = NewArticleInfoTemplate();
-  article.title = title;
-  article.content = content;
-  article.description = description;
+export type EditArticleRequest = {
+  title: string;
+  content: string;
+  description: string;
+  publish: boolean;
+  thumbnail?: File;
+  images?: File[];
+};
+
+export async function PostArticle(req: EditArticleRequest): Promise<boolean> {
+  if (req.thumbnail === undefined) return false;
 
   const request = new FormData();
-  request.append('article', JSON.stringify(article));
-  request.append('thumbnail', thumbnail);
-  images.forEach((image) => request.append('images', image));
-  const [res] = await API.POST<boolean>(
-    '/auth/article',
-    request,
-    ContentTypeForm
-  );
+  request.append('title', req.title);
+  request.append('content', req.content);
+  request.append('description', req.description);
+  request.append('publish', req.publish ? 'true' : 'false');
+  request.append('thumbnail', req.thumbnail);
+  (req.images ?? []).forEach((image) => request.append('images', image));
+  const [, status] = await API.POST('/auth/article', request, ContentTypeForm);
 
-  return res;
+  return API.IsOK(status);
 }
 
 export async function GetMyArticles(
@@ -80,4 +79,32 @@ export async function GetMyArticles(
   );
 
   return res;
+}
+
+export async function PutArticle(
+  id: number,
+  req: EditArticleRequest
+): Promise<boolean> {
+  const request = new FormData();
+  request.append('title', req.title);
+  request.append('content', req.content);
+  request.append('description', req.description);
+  request.append('publish', req.publish ? 'true' : 'false');
+  if (req.thumbnail !== undefined) request.append('thumbnail', req.thumbnail);
+  if (req.images !== undefined)
+    req.images.forEach((image) => request.append('images', image));
+
+  const [, status] = await API.PUT(
+    '/auth/article/' + id.toString(),
+    request,
+    ContentTypeForm
+  );
+
+  return API.IsOK(status);
+}
+
+export async function DeleteArticle(id: number): Promise<boolean> {
+  const status = await API.DELETE('/auth/article/' + id.toString());
+
+  return API.IsOK(status);
 }

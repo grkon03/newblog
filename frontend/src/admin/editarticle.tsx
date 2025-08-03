@@ -53,13 +53,14 @@ const EditArticle: React.FC<Props> = ({ mainareaprops }) => {
   const handleSaveClick = () => {};
   const handlePublishClick = () => {
     if (!thumbnail) return;
-    PostArticle(
-      title,
-      MDtext,
-      description,
-      thumbnail,
-      Array.from(uploadedImages.values())
-    );
+    PostArticle({
+      title: title,
+      content: MDtext,
+      description: description,
+      publish: true,
+      thumbnail: thumbnail,
+      images: Array.from(uploadedImages.values()),
+    });
   };
 
   return (

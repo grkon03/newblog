@@ -68,6 +68,32 @@ class APIHandler {
     return [await res.json(), res.status];
   }
 
+  async PUT<ResultType>(
+    endpoint: string,
+    request: any,
+    contentType?: string
+  ): Promise<[ResultType, number]> {
+    const res = await fetch(
+      this.EndpointURL(endpoint),
+      this.MakeRequest('PUT', request, contentType)
+    );
+
+    return [await res.json(), res.status];
+  }
+
+  async DELETE(
+    endpoint: string,
+    request?: any,
+    contentType?: string
+  ): Promise<number> {
+    const res = await fetch(
+      this.EndpointURL(endpoint),
+      this.MakeRequest('DELETE', request ?? {}, contentType)
+    );
+
+    return res.status;
+  }
+
   IsOK(status: number) {
     return 200 <= status && status < 300;
   }
