@@ -81,7 +81,6 @@ export async function PutArticle(
   req: EditArticleRequest
 ): Promise<boolean> {
   const request = ToFormData(req);
-  req.images.forEach((image) => request.append('images', image));
 
   const [, status] = await API.PUT(
     '/auth/article/' + id.toString(),
