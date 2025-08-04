@@ -10,6 +10,7 @@ export type ArticleInfo = {
   title: string;
   content: string;
   description: string;
+  is_published: boolean;
   writer_id: number;
   writer: User;
   thumbnail_id: number;
@@ -24,6 +25,7 @@ export function NewArticleInfoTemplate(): ArticleInfo {
     title: '',
     content: '',
     description: '',
+    is_published: false,
     writer_id: 0,
     writer: NewUserTemplate(),
     thumbnail_id: 0,

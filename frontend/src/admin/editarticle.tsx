@@ -5,7 +5,12 @@ import SubmitButtons from './ea-components/submitbuttons';
 import { MainAreaProps, InitSideArea } from '../types';
 import { AdminSA } from '../base-component/sidearea/admin';
 import { GetImageSrc } from '../api/image';
-import { GetArticle, PostArticle } from '../api/article';
+import {
+  ArticleInfo,
+  GetArticle,
+  PostArticle,
+  PutArticle,
+} from '../api/article';
 import styles from './editarticle.module.css';
 
 type Props = {
@@ -19,27 +24,31 @@ const EditArticle: React.FC<Props> = ({ mainareaprops }) => {
 
   const [isFetched, setIsFetched] = useState(false);
 
-  const [ID] = useState<string | undefined>(location.state?.id);
+  const [ID, setID] = useState<string | undefined>(location.state?.id);
   const [title, setTitle] = useState('');
   const [thumbnail, setThumbnail] = useState<File>();
   const [thumbnailURL, setThumbnailURL] = useState('');
   const [description, setDescription] = useState('');
   const [MDtext, setMDtext] = useState('');
+  const [isPublished, setIsPublished] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<Map<string, File>>(
     new Map<string, File>()
   );
+
+  const setArticle = (article: ArticleInfo) => {
+    setTitle(article.title);
+    setThumbnailURL(GetImageSrc(article.thumbnail_id));
+    setDescription(article.description);
+    setMDtext(article.content);
+    setIsPublished(article.is_published);
+  };
 
   useEffect(() => {
     if (isFetched) return;
     if (ID === undefined) return;
 
     setIsFetched(true);
-    GetArticle(ID).then((article) => {
-      setTitle(article.title);
-      setThumbnailURL(GetImageSrc(article.thumbnail_id));
-      setDescription(article.description);
-      setMDtext(article.content);
-    });
+    GetArticle(ID).then((article) => setArticle(article));
   }, [ID, isFetched]);
 
   useEffect(() => {
@@ -50,17 +59,43 @@ const EditArticle: React.FC<Props> = ({ mainareaprops }) => {
     return () => URL.revokeObjectURL(newURL);
   }, [thumbnail]);
 
-  const handleSaveClick = () => {};
-  const handlePublishClick = () => {
-    if (!thumbnail) return;
-    PostArticle({
+  const Upload = (publish: boolean) => {
+    var req = {
       title: title,
       content: MDtext,
       description: description,
-      publish: true,
+      publish: publish,
       thumbnail: thumbnail,
       images: Array.from(uploadedImages.values()),
-    });
+    };
+    if (ID === undefined) {
+      PostArticle(req).then((article) => {
+        if (article === undefined) {
+          alert('記事をアップロードできませんでした');
+          return;
+        }
+
+        alert('記事のアップロードに成功しました');
+
+        setID(article.id.toString());
+        setArticle(article);
+      });
+    } else {
+      PutArticle(Number(ID), req).then((ok) => {
+        if (!ok) {
+          alert('記事をアップロードできませんでした');
+        } else {
+          alert('記事のアップロードに成功しました');
+        }
+      });
+    }
+  };
+
+  const handleSaveClick = () => {
+    Upload(isPublished);
+  };
+  const handlePublishClick = () => {
+    Upload(true);
   };
 
   return (
