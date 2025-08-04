@@ -1,6 +1,7 @@
 import { API, ContentTypeForm } from './api';
 import { User, NewUserTemplate } from './user';
 import { Image, NewImageTemplate } from './image';
+import { ToFormData } from './util';
 
 export type ArticleInfo = {
   id: number;
@@ -58,13 +59,7 @@ export type EditArticleRequest = {
 export async function PostArticle(req: EditArticleRequest): Promise<boolean> {
   if (req.thumbnail === undefined) return false;
 
-  const request = new FormData();
-  request.append('title', req.title);
-  request.append('content', req.content);
-  request.append('description', req.description);
-  request.append('publish', req.publish ? 'true' : 'false');
-  request.append('thumbnail', req.thumbnail);
-  (req.images ?? []).forEach((image) => request.append('images', image));
+  const request = ToFormData(req);
   const [, status] = await API.POST('/auth/article', request, ContentTypeForm);
 
   return API.IsOK(status);
@@ -85,14 +80,8 @@ export async function PutArticle(
   id: number,
   req: EditArticleRequest
 ): Promise<boolean> {
-  const request = new FormData();
-  request.append('title', req.title);
-  request.append('content', req.content);
-  request.append('description', req.description);
-  request.append('publish', req.publish ? 'true' : 'false');
-  if (req.thumbnail !== undefined) request.append('thumbnail', req.thumbnail);
-  if (req.images !== undefined)
-    req.images.forEach((image) => request.append('images', image));
+  const request = ToFormData(req);
+  req.images.forEach((image) => request.append('images', image));
 
   const [, status] = await API.PUT(
     '/auth/article/' + id.toString(),
