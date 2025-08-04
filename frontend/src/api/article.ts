@@ -56,13 +56,20 @@ export type EditArticleRequest = {
   images?: File[];
 };
 
-export async function PostArticle(req: EditArticleRequest): Promise<boolean> {
-  if (req.thumbnail === undefined) return false;
+export async function PostArticle(
+  req: EditArticleRequest
+): Promise<ArticleInfo | undefined> {
+  if (req.publish && req.thumbnail === undefined) return undefined;
 
   const request = ToFormData(req);
-  const [, status] = await API.POST('/auth/article', request, ContentTypeForm);
+  const [res, status] = await API.POST<ArticleInfo>(
+    '/auth/article',
+    request,
+    ContentTypeForm
+  );
 
-  return API.IsOK(status);
+  if (API.IsOK(status)) return res;
+  else return undefined;
 }
 
 export async function GetMyArticles(
