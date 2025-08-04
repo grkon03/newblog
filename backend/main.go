@@ -8,8 +8,8 @@ import (
 	"github.com/grkon03/newblog/backend/database"
 	"github.com/grkon03/newblog/backend/model"
 	"github.com/grkon03/newblog/backend/service"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {

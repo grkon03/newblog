@@ -4,11 +4,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/grkon03/newblog/backend/model"
 	"github.com/grkon03/newblog/backend/service/repository"
 	"github.com/grkon03/newblog/backend/util"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type UserAPI struct {

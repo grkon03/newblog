@@ -4,9 +4,9 @@ import (
 	"errors"
 	"time"
 
-	"github.com/dgrijalva/jwt-go"
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/golang-jwt/jwt/v5"
+	echojwt "github.com/labstack/echo-jwt/v4"
+	"github.com/labstack/echo/v4"
 )
 
 const (
@@ -31,25 +31,26 @@ type JWTUser struct {
 }
 
 func (j *JWTUser) JWTUserMiddleware() echo.MiddlewareFunc {
-	return middleware.JWTWithConfig(middleware.JWTConfig{
-		SigningKey:  []byte(j.secretKey),
-		ContextKey:  JWTUserContextKey,
-		Claims:      &JWTUserClaims{},
+	return echojwt.WithConfig(echojwt.Config{
+		SigningKey: []byte(j.secretKey),
+		ContextKey: JWTUserContextKey,
+		NewClaimsFunc: func(c echo.Context) jwt.Claims {
+			return new(JWTUserClaims)
+		},
 		TokenLookup: "header:Authorization",
 	})
 }
 
 type JWTUserClaims struct {
 	UserID uint `json:"UserID"`
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 func newJWTUserClaims(id uint) JWTUserClaims {
 	return JWTUserClaims{
 		UserID: id,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().AddDate(0, 6, 0).Unix(),
-			IssuedAt:  time.Now().Unix(),
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
 		},
 	}
 }

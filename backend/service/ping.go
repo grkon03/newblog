@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/grkon03/newblog/backend/database"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type PingAPI struct {

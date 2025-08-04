@@ -7,7 +7,7 @@ import (
 
 	"github.com/grkon03/newblog/backend/service/repository"
 	"github.com/grkon03/newblog/backend/util"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 

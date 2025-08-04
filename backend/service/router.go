@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 func Routing(e *echo.Echo, api API) error {
@@ -34,8 +34,8 @@ func Routing(e *echo.Echo, api API) error {
 		{
 			admin.GET("/ping", api.PingAPI.Ping)
 			admin.POST("/article", api.ArticleAPI.PostArticle)
-			admin.PUT("/article", api.ArticleAPI.PutArticle)
-			admin.DELETE("/article", api.ArticleAPI.DeleteArticle)
+			admin.PUT("/article/:id", api.ArticleAPI.PutArticle)
+			admin.DELETE("/article/:id", api.ArticleAPI.DeleteArticle)
 			admin.GET("/myarticles", api.ArticleAPI.GetMyArticles)
 		}
 	}

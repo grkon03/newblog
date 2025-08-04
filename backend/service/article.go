@@ -10,7 +10,7 @@ import (
 	"github.com/grkon03/newblog/backend/model"
 	"github.com/grkon03/newblog/backend/service/repository"
 	"github.com/grkon03/newblog/backend/util"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type ArticleAPI struct {
@@ -77,7 +77,7 @@ func (a *ArticleAPI) GetArticles(c echo.Context) error {
 	return nil
 }
 
-type PostArticleRequest struct {
+type EditArticleRequest struct {
 	Article   model.Article           `form:"article"`
 	Images    []*multipart.FileHeader `form:"images"`
 	Thumbnail *multipart.FileHeader   `form:"thumbnail"`
@@ -90,7 +90,7 @@ func (a *ArticleAPI) PostArticle(c echo.Context) error {
 	}
 	writerID := claims.UserID
 
-	var request PostArticleRequest
+	var request EditArticleRequest
 
 	err = c.Request().ParseMultipartForm(1 << 24)
 	if err != nil {
