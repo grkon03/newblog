@@ -7,6 +7,6 @@ type ArticleHandler interface {
 	GetArticle(id uint) (*model.Article, error)
 	GetArticles(from, count uint, excludeUnpublished bool) ([]model.Article, error)
 	GetWritersArticles(writerID uint, isPublished bool, from, count uint) ([]model.Article, error)
-	UpdateArticle(writerID uint, article *model.Article) error
-	DeleteArticle(writerID, articleID uint) error
+	UpdateArticle(id uint, title, content, description string, isPublished bool, writerID, thumbnailID uint) error
+	DeleteArticle(id, writerID uint) error
 }

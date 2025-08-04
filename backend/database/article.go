@@ -56,20 +56,28 @@ func (h *ArticleHandler) GetWritersArticles(writerID uint, excludeUnpublished bo
 	return articles, err
 }
 
-func (h *ArticleHandler) UpdateArticle(writerID uint, article *model.Article) error {
-	if article.ID == 0 {
+func (h *ArticleHandler) UpdateArticle(id uint, title, content, description string, isPublished bool, writerID, thumbnailID uint) error {
+	if id == 0 {
 		return errors.New("ID cannot be 0")
 	}
 
 	// note: verifying the coincidence of WriterID
-	return h.DB.Where(model.Article{ID: article.ID, WriterID: writerID}).Updates(article).Error
+	return h.DB.Where(model.Article{ID: id, WriterID: writerID}).Updates(
+		&model.Article{
+			Title:       title,
+			Content:     content,
+			Description: description,
+			IsPublished: &isPublished,
+			ThumbnailID: thumbnailID,
+		},
+	).Error
 }
 
-func (h *ArticleHandler) DeleteArticle(writerID, articleID uint) error {
-	if articleID == 0 {
+func (h *ArticleHandler) DeleteArticle(id, writerID uint) error {
+	if id == 0 {
 		return errors.New("ID cannot be 0")
 	}
 
 	// note: verifying the coincidence of WriterID
-	return h.DB.Delete(&model.Article{ID: articleID, WriterID: writerID}).Error
+	return h.DB.Delete(&model.Article{ID: id, WriterID: writerID}).Error
 }
