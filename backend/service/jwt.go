@@ -22,22 +22,22 @@ type JWT struct {
 
 func NewJWT(secretKey string) JWT {
 	return JWT{
-		user: &JWTUser{secretKey: secretKey},
+		user: &JWTUser{secretKey: []byte(secretKey)},
 	}
 }
 
 type JWTUser struct {
-	secretKey string
+	secretKey []byte
 }
 
 func (j *JWTUser) JWTUserMiddleware() echo.MiddlewareFunc {
 	return echojwt.WithConfig(echojwt.Config{
-		SigningKey: []byte(j.secretKey),
-		ContextKey: JWTUserContextKey,
+		SigningKey:    j.secretKey,
+		SigningMethod: jwt.SigningMethodHS256.Name,
+		ContextKey:    JWTUserContextKey,
 		NewClaimsFunc: func(c echo.Context) jwt.Claims {
 			return new(JWTUserClaims)
 		},
-		TokenLookup: "header:Authorization",
 	})
 }
 
@@ -46,10 +46,11 @@ type JWTUserClaims struct {
 	jwt.RegisteredClaims
 }
 
-func newJWTUserClaims(id uint) JWTUserClaims {
-	return JWTUserClaims{
+func newJWTUserClaims(id uint) *JWTUserClaims {
+	return &JWTUserClaims{
 		UserID: id,
 		RegisteredClaims: jwt.RegisteredClaims{
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 72)),
 		},
 	}

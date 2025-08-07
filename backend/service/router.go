@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/labstack/echo/v4"
 )
 
@@ -30,6 +32,12 @@ func Routing(e *echo.Echo, api API) error {
 		a.POST("/login", api.UserAPI.Login)
 
 		admin := a.Group("/auth")
+		admin.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+			return func(c echo.Context) error {
+				fmt.Println("Article Header", c.Request().Header.Get("Authorization"))
+				return next(c)
+			}
+		})
 		admin.Use(userauth)
 		{
 			admin.GET("/ping", api.PingAPI.Ping)

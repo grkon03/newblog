@@ -29,7 +29,7 @@ const MyMarkdown: React.FC<Props> = ({ children, localImageURLs }) => {
         GetArticle(refedID).then((res) => {
           setReferencedArticles((prev) => {
             const newMap = new Map(prev);
-            newMap.set(refedID, res);
+            if (res.IsOK()) newMap.set(refedID, res.result);
             return newMap;
           });
         });

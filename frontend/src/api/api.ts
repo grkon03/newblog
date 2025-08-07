@@ -1,3 +1,5 @@
+import Result from './result';
+
 const APIURL = 'http://localhost:3111/api';
 
 export const ContentTypeJSON = 'application/json';
@@ -47,51 +49,51 @@ class APIHandler {
     return req;
   }
 
-  async GET<ResultType>(endpoint: string): Promise<[ResultType, number]> {
+  async GET<ResultType>(endpoint: string): Promise<Result<ResultType>> {
     const res = await fetch(
       this.EndpointURL(endpoint),
       this.MakeRequest('GET')
     );
 
-    return [await res.json(), res.status];
+    return Result.New<ResultType>(res);
   }
 
   async POST<ResultType>(
     endpoint: string,
     request: any,
     contentType?: string
-  ): Promise<[ResultType, number]> {
+  ): Promise<Result<ResultType>> {
     const res = await fetch(
       this.EndpointURL(endpoint),
       this.MakeRequest('POST', request, contentType)
     );
-    return [await res.json(), res.status];
+    return Result.New<ResultType>(res);
   }
 
   async PUT<ResultType>(
     endpoint: string,
     request: any,
     contentType?: string
-  ): Promise<[ResultType, number]> {
+  ): Promise<Result<ResultType>> {
     const res = await fetch(
       this.EndpointURL(endpoint),
       this.MakeRequest('PUT', request, contentType)
     );
 
-    return [await res.json(), res.status];
+    return Result.New<ResultType>(res);
   }
 
   async DELETE(
     endpoint: string,
     request?: any,
     contentType?: string
-  ): Promise<number> {
+  ): Promise<Result<null>> {
     const res = await fetch(
       this.EndpointURL(endpoint),
       this.MakeRequest('DELETE', request ?? {}, contentType)
     );
 
-    return res.status;
+    return Result.New(res);
   }
 
   IsOK(status: number) {

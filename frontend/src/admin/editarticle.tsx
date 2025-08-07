@@ -48,7 +48,9 @@ const EditArticle: React.FC<Props> = ({ mainareaprops }) => {
     if (ID === undefined) return;
 
     setIsFetched(true);
-    GetArticle(ID).then((article) => setArticle(article));
+    GetArticle(ID).then((res) => {
+      if (res.IsOK()) setArticle(res.result);
+    });
   }, [ID, isFetched]);
 
   useEffect(() => {
@@ -69,23 +71,23 @@ const EditArticle: React.FC<Props> = ({ mainareaprops }) => {
       images: Array.from(uploadedImages.values()),
     };
     if (ID === undefined) {
-      PostArticle(req).then((article) => {
-        if (article === undefined) {
+      PostArticle(req).then((res) => {
+        if (!res.IsOK()) {
           alert('記事をアップロードできませんでした');
           return;
         }
 
         alert('記事のアップロードに成功しました');
 
-        setID(article.id.toString());
-        setArticle(article);
+        setID(res.result.id.toString());
+        setArticle(res.result);
       });
     } else {
-      PutArticle(Number(ID), req).then((ok) => {
-        if (!ok) {
-          alert('記事をアップロードできませんでした');
-        } else {
+      PutArticle(Number(ID), req).then((res) => {
+        if (res.IsOK()) {
           alert('記事のアップロードに成功しました');
+        } else {
+          alert('記事をアップロードできませんでした');
         }
       });
     }

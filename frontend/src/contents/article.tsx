@@ -15,18 +15,22 @@ const Article: React.FC<Props> = ({ mainareaprops }) => {
   InitSideArea(mainareaprops);
 
   const { id } = useParams();
+  const [message, setMessage] = useState('Loading content');
   const [article, setArticle] = useState<ArticleInfo>();
 
   useEffect(() => {
     if (id !== undefined) {
       GetArticle(id)
-        .then((res) => setArticle(res))
+        .then((res) => {
+          if (res.IsOK()) setArticle(res.result);
+          else setMessage('Cannot load content');
+        })
         .catch((err) => console.error(err));
     }
   }, [id]);
 
   if (!article) {
-    return <div>Loading content</div>;
+    return <div>{message}</div>;
   }
   const thumbnailsrc = GetImageSrc(article.thumbnail_id);
 

@@ -1,3 +1,4 @@
+import Result from './result';
 import { API, ContentTypeForm } from './api';
 import { User, NewUserTemplate } from './user';
 import { Image, NewImageTemplate } from './image';
@@ -33,20 +34,17 @@ export function NewArticleInfoTemplate(): ArticleInfo {
   };
 }
 
-export async function GetArticle(id: string): Promise<ArticleInfo> {
-  const [res] = await API.GET<ArticleInfo>('/article/' + id);
-  return res;
+export async function GetArticle(id: string): Promise<Result<ArticleInfo>> {
+  return API.GET<ArticleInfo>('/article/' + id);
 }
 
 export async function GetArticles(
   from: number,
   count: number
-): Promise<ArticleInfo[]> {
-  const [res] = await API.GET<ArticleInfo[]>(
+): Promise<Result<ArticleInfo[]>> {
+  return API.GET<ArticleInfo[]>(
     '/articles?from=' + from.toString() + '&count=' + count.toString()
   );
-
-  return res;
 }
 
 export type EditArticleRequest = {
@@ -60,25 +58,27 @@ export type EditArticleRequest = {
 
 export async function PostArticle(
   req: EditArticleRequest
-): Promise<ArticleInfo | undefined> {
-  if (req.publish && req.thumbnail === undefined) return undefined;
+): Promise<Result<ArticleInfo>> {
+  if (req.publish && req.thumbnail === undefined)
+    return Result.InternalBadRequestError(
+      'Cannot publish without any thumbnails.'
+    );
 
   const request = ToFormData(req);
-  const [res, status] = await API.POST<ArticleInfo>(
+  const res = await API.POST<ArticleInfo>(
     '/auth/article',
     request,
     ContentTypeForm
   );
 
-  if (API.IsOK(status)) return res;
-  else return undefined;
+  return res;
 }
 
 export async function GetMyArticles(
   from: number,
   count: number
-): Promise<ArticleInfo[]> {
-  const [res] = await API.GET<ArticleInfo[]>(
+): Promise<Result<ArticleInfo[]>> {
+  const res = await API.GET<ArticleInfo[]>(
     '/auth/myarticles?from=' + from.toString() + '&count=' + count.toString()
   );
 
@@ -88,20 +88,20 @@ export async function GetMyArticles(
 export async function PutArticle(
   id: number,
   req: EditArticleRequest
-): Promise<boolean> {
+): Promise<Result<null>> {
   const request = ToFormData(req);
 
-  const [, status] = await API.PUT(
+  const res = await API.PUT<null>(
     '/auth/article/' + id.toString(),
     request,
     ContentTypeForm
   );
 
-  return API.IsOK(status);
+  return res;
 }
 
-export async function DeleteArticle(id: number): Promise<boolean> {
-  const status = await API.DELETE('/auth/article/' + id.toString());
+export async function DeleteArticle(id: number): Promise<Result> {
+  const res = await API.DELETE('/auth/article/' + id.toString());
 
-  return API.IsOK(status);
+  return res;
 }

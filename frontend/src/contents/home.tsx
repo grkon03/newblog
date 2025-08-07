@@ -21,10 +21,14 @@ const Home: React.FC<Props> = ({ mainareaprops }) => {
 
   useEffect(() => {
     GetArticles(nextToLoad, onestep).then((res) => {
-      setArticles((prev) => [
-        ...prev,
-        ...res.filter((a) => !prev.some((b) => b.id === a.id)),
-      ]);
+      setArticles((prev) => {
+        if (res.IsOK())
+          return [
+            ...prev,
+            ...res.result.filter((a) => !prev.some((b) => b.id === a.id)),
+          ];
+        else return prev;
+      });
     });
   }, [nextToLoad]);
 

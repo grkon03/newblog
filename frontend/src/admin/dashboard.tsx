@@ -26,7 +26,7 @@ const Dashboard: React.FC<Props> = ({ mainareaprops }) => {
 
   useEffect(() => {
     GetMyArticles(nextToLoad, onestep).then((res) => {
-      setArticles(res);
+      if (res.IsOK()) setArticles(res.result);
     });
   }, [nextToLoad]);
 

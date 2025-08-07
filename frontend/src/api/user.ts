@@ -1,3 +1,4 @@
+import Result from './result';
 import { API } from './api';
 
 export type User = {
@@ -22,21 +23,15 @@ export type LoginRequest = {
   username: string;
   password: string;
 };
+type LoginResponse = {
+  token: string;
+  user: User;
+};
 
-export async function Login(req: LoginRequest): Promise<boolean> {
-  type LoginResponse = {
-    token: string;
-    user: User;
-  };
+export async function Login(req: LoginRequest): Promise<Result<LoginResponse>> {
+  const res = await API.POST<LoginResponse>('/login', req);
 
-  const [res, status] = await API.POST<LoginResponse>('/login', req);
-
-  if (API.IsOK(status)) {
-    localStorage.setItem('token', res.token);
-    localStorage.setItem('user', JSON.stringify(res.user));
-  }
-
-  return API.IsOK(status);
+  return res;
 }
 
 export function LoginUser(): User | null {
