@@ -31,6 +31,11 @@ type LoginResponse = {
 export async function Login(req: LoginRequest): Promise<Result<LoginResponse>> {
   const res = await API.POST<LoginResponse>('/login', req);
 
+  if (res.IsOK()) {
+    localStorage.setItem('token', res.result.token);
+    localStorage.setItem('user', JSON.stringify(res.result.user));
+  }
+
   return res;
 }
 

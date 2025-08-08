@@ -35,8 +35,8 @@ const LoginPage: React.FC<Props> = ({ mainareaprops }) => {
       password: password,
     };
 
-    Login(req).then((ok) => {
-      if (ok) {
+    Login(req).then((res) => {
+      if (res.IsOK()) {
         AfterSucceeded();
       } else {
         AfterFailed();

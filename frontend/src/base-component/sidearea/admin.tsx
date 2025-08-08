@@ -17,6 +17,12 @@ const Menu: React.FC = () => {
       <div className={sastyles.sai_content}>
         <div
           className={styles.menuitem}
+          onClick={() => navigate('/admin/dashboard')}
+        >
+          ダッシュボード
+        </div>
+        <div
+          className={styles.menuitem}
           onClick={() => navigate('/admin/editarticle')}
         >
           記事を作成する
